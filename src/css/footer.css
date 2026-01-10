@@ -1,0 +1,268 @@
+
+
+/* Footer Container */
+.footer-container {
+  width: 100%;
+  background-color: #1a1a1a;
+  color: #ffffff;
+  padding: 80px 0 20px 0;
+}
+
+.footer-content {
+  padding: 0 20px;
+  gap: 80px;
+}
+
+.footer-section {
+  flex: 1;
+  min-width: 150px;
+}
+
+/* Title Styles */
+.footer-title {
+  font-family: "Poppins", sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+  line-height: 28px;
+}
+
+.footer-category-title {
+  font-family: "Poppins", sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0 0 24px 0;
+  line-height: 20px;
+  position: relative;
+  display: inline-block;
+  padding-bottom: 8px;
+}
+
+.footer-category-title::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: #d7b686;
+  transition: width 250ms ease-in-out;
+}
+
+.footer-category-title:hover::after {
+  width: 100%;
+}
+
+/* Footer Links */
+.footer-category-link {
+  font-family: "Poppins", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #bbbcbd;
+  line-height: 24px;
+}
+
+.footer-category-link a {
+  display: block;
+  color: #bbbcbd;
+  text-decoration: none;
+  transition: color 250ms ease;
+  margin-bottom: 16px;
+}
+
+.footer-category-link a:hover {
+  color: #d7b686;
+}
+
+.footer-category-link p {
+  margin: 0 0 16px 0;
+  color: #bbbcbd;
+}
+
+/* Subscribe Section */
+.footer-exclusive {
+  max-width: 250px;
+}
+
+.footer-subscribe {
+  margin-top: 24px;
+}
+
+.footer-subscribe p {
+  font-family: "Poppins", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #bbbcbd;
+  margin: 0 0 16px 0;
+  line-height: 20px;
+}
+
+.subscribe-input-wrapper {
+  display: flex;
+  align-items: center;
+  border: 1px solid #bbbcbd;
+  border-radius: 4px;
+  padding: 0 16px;
+  height: 40px;
+  background-color: transparent;
+}
+
+.subscribe-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  color: #ffffff;
+  outline: none;
+  font-family: "Poppins", sans-serif;
+  font-size: 14px;
+}
+
+.subscribe-input::placeholder {
+  color: #7f8080;
+}
+
+.subscribe-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.subscribe-btn img {
+  width: 20px;
+  height: 20px;
+}
+
+/* App Download Section */
+.footer-app {
+  max-width: 200px;
+}
+
+.app-promo {
+  font-family: "Poppins", sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: #bbbcbd;
+  margin: 16px 0;
+  line-height: 18px;
+}
+
+.qr-app-wrapper {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.qr-code {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+}
+
+.app-links {
+  display: flex;
+  flex-direction: column;
+  
+}
+
+.app-store-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.app-store-link img {
+  height: 46px;
+width: 110px;
+ 
+}
+
+.social-icons {
+  margin-top: 24px;
+}
+
+.social-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.1);
+  transition: background-color 250ms ease;
+  text-decoration: none;
+}
+
+.social-link:hover {
+  background-color: #d7b686;
+}
+
+.social-link img {
+  width: 18px;
+  height: 18px;
+}
+
+/* Divider */
+.footer-divider {
+  width: 100%;
+  height: 1px;
+  background-color: rgba(197, 200, 201, 0.2);
+  margin: 48px 0;
+}
+
+/* Copyright */
+.footer-copyright {
+  text-align: center;
+  padding: 16px 0;
+}
+
+.footer-copyright p {
+  font-family: "Poppins", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: rgba(187, 188, 189, 0.8);
+  margin: 0;
+  line-height: 20px;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .footer-content {
+    gap: 40px;
+    flex-wrap: wrap;
+  }
+
+  .footer-section {
+    flex: 1 1 calc(50% - 20px);
+    min-width: 150px;
+  }
+}
+
+@media (max-width: 768px) {
+  .footer-container {
+    padding: 40px 0 20px 0;
+  }
+
+  .footer-content {
+    gap: 30px;
+    flex-direction: column;
+  }
+
+  .footer-section {
+    flex: 1 1 100%;
+  }
+
+  .footer-title {
+    font-size: 20px;
+  }
+
+  .footer-category-title {
+    font-size: 14px;
+  }
+}

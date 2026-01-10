@@ -1,0 +1,288 @@
+.orders-page {
+  width: 100%;
+  height: auto;
+  display: flex;
+}
+
+.orders-page .order-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.orders-page .order-container .order-left .order-nav-frame {
+  margin-left: 120px;
+  margin-top: 20px;
+  width: 679px;
+  height: 49px;
+  border-bottom: none;
+}
+
+.orders-page .order-inf {
+  margin-top: 20px;
+  width: 868.88px;
+  height: auto;
+  border-radius: 16px;
+
+  box-shadow: inset 0px 4px 16px 0px rgba(242, 189, 87, 0.04),
+    inset 0px 4px 10px 9px rgb(211, 211, 231),
+    -12px 12px 4px 0px rgb(186, 186, 191);
+  background: rgb(248, 248, 254);
+}
+
+/* .orders-page .order-container .order-left {
+  width: 868.88px;
+  height: 236px;
+  display: flex;
+  flex-direction: column;
+  background: yellowgreen;
+} */
+
+.orders-page .order-inf .order-box-scroll {
+  margin: 30px 0 30px 70px;
+  width: 702.73px;
+  height: auto;
+}
+
+.orders-page .order-inf .order-box-scroll .order-name-price {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.orders-page
+  .order-inf
+  .order-box-scroll
+  .order-name-price
+  .order-name-price-inf {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+}
+
+.orders-page .order-inf .order-box-scroll .order-name-price .price-box-inf {
+  margin-right: 60px;
+  display: flex;
+  flex-direction: row;
+}
+
+.orders-page .order-inf .order-box-scroll .order-name-price .order-dish-img {
+  width: 52.92px;
+  height: 45.57px;
+
+  border-radius: 29px;
+
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+}
+
+.orders-page .order-inf .order-box-scroll .order-name-price .price-box {
+  display: flex;
+  flex-direction: row;
+}
+
+.orders-page .total-price-box {
+  margin-bottom: 30px;
+  width: 793.74px;
+  height: 34.91px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.orders-page .total-price-box .box-total {
+  margin: 0 100px 0 40px;
+  width: 501.65px;
+  height: 30.06px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.orders-page .total-price-box .cencel-button {
+  margin-right: 25px;
+  width: 98.53px;
+  height: 34.91px;
+  border-radius: 10px;
+  background: rgb(210, 182, 140);
+
+  color: rgb(52, 52, 52);
+  font-family: "Commissioner";
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 17px;
+}
+
+.orders-page .total-price-box .pay-button {
+  width: 95.25px;
+  height: 34.91px;
+  border-radius: 10px;
+
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  background: rgb(112, 180, 91);
+
+  color: rgb(255, 255, 255);
+  font-family: "Commissioner";
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 17px;
+}
+
+/* order-right */
+
+.orders-page .order-container .order-right {
+  margin: 90px 0 100px 0;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.orders-page .order-container .order-right .order-right-top {
+  margin-top: 25px;
+  width: 372px;
+  height: 308px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 16px;
+  box-shadow: inset 0px 4px 16px 0px rgba(242, 189, 87, 0.04),
+    inset 0px 1px 11px 12px rgb(211, 211, 231),
+    14px 14px 5px 0px rgb(187, 187, 191);
+  background: rgb(248, 248, 254);
+}
+
+.orders-page .order-container .order-right-top .order-right-img {
+  margin-top: 25px;
+  width: 117px;
+  height: 112px;
+  border-radius: 37px;
+
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+}
+
+.orders-page .order-container .order-right-top .order-right-name {
+  text-align: center;
+  margin-bottom: 10px;
+  font-family: "Commissioner";
+  font-size: 28px;
+  font-weight: 500;
+  line-height: 30px;
+  color: rgb(8, 9, 13);
+}
+
+.orders-page .order-container .order-right-top .order-right-border {
+  width: 332.59px;
+  border: 1px solid rgb(161, 161, 161);
+}
+
+.orders-page .order-container .order-right-top .order-right-location {
+  margin-right: 40%;
+  font-family: "DM Sans";
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  color: rgb(0, 0, 0);
+}
+
+.orders-page .order-container .order-right .order-right-button {
+  margin-top: 20px;
+  width: 372px;
+  height: 308px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  border-radius: 16px;
+  box-shadow: inset 0px 4px 16px 0px rgba(242, 189, 87, 0.04),
+    inset 0px 1px 11px 12px rgb(211, 211, 231),
+    14px 14px 5px 0px rgb(187, 187, 191);
+  background: rgb(248, 248, 254);
+}
+
+.orders-page .order-container .order-right-button .order-right-top-button {
+  margin-top: 40px;
+  width: 332px;
+  height: 40px;
+  box-sizing: border-box;
+  border: 1px solid rgb(180, 170, 170);
+  border-radius: 5px;
+
+  background: rgb(245, 245, 245);
+}
+
+.orders-page .order-container .order-right-button .order-right-middle-input {
+  margin-top: 10px;
+}
+
+.orders-page .order-container .order-right-button .order-rignt-left {
+  margin-right: 10px;
+  width: 162px;
+  height: 40px;
+  box-sizing: border-box;
+  border: 1px solid rgb(180, 170, 170);
+  border-radius: 5px;
+
+  background: rgb(245, 245, 245);
+}
+
+.orders-page .order-container .order-right-button .order-rignt-right {
+  width: 162px;
+  height: 40px;
+  box-sizing: border-box;
+  border: 1px solid rgb(180, 170, 170);
+  border-radius: 5px;
+
+  background: rgb(245, 245, 245);
+}
+
+.orders-page .order-right-button .order-right-card {
+  margin-top: 55px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.orders-page .order-right-button .order-right-card .visa-card-img {
+  padding-right: 30px;
+}
+
+/* process order */
+.orders-page .total-price-box-process {
+  margin-bottom: 30px;
+  margin-left: 25px;
+  width: 793.74px;
+  height: 34.91px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.orders-page .total-price-box-process .box-total {
+  margin: 0 100px 0 40px;
+  width: 501.65px;
+  height: 30.06px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.orders-page .total-price-box-process .process-pay-button {
+  margin-left: -20px;
+  width: 180px;
+  height: 34.91px;
+  border-radius: 10px;
+
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  background: rgb(110, 161, 244);
+
+  color: rgb(255, 255, 255);
+  font-family: "Commissioner";
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 17px;
+}
+
+.orders-page .total-price-box-process .data-compl {
+  margin-left: 30px;
+}
