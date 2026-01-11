@@ -7,7 +7,7 @@ import UserPage from "./screens/userPage";
 import HomeNavbar from "./components/headers/HomeNavbar";
 import OtherNavbar from "./components/headers/OtherNavbar";
 import Footer from "./components/footer";
-import HelpPage from "./screens/helpPage";
+import HelpPage from "./screens/aboutPage";
 import AuthenticationModal from "./components/auth";
 import useBasket from "./hooks/useBasket";
 import { sweetErrorHandling, sweetTopSuccessAlert } from "../lib/sweetAlert";
@@ -16,6 +16,8 @@ import { useGlobals } from "./hooks/useGlobals";
 import "../css/app.css";
 import "../css/navbar.css";
 import "../css/footer.css";
+import AboutPage from "./screens/aboutPage";
+
 
 function App() {
   const location = useLocation();
@@ -85,8 +87,8 @@ function App() {
         <Route path="/orders">
           <OrdersPage />
         </Route>
-        <Route path="/helps">
-          <HelpPage />
+        <Route path="/about">
+          <AboutPage />
         </Route>
         <Route path="/member-page">
           <UserPage />
