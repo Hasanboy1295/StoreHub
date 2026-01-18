@@ -54,6 +54,7 @@ class MemberService {
       console.log("error, signup:", err);
       throw err;
     }
+    
   }
 
   public async login(input: LoginInput): Promise<Member> {

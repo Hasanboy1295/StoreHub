@@ -1,0 +1,116 @@
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+}
+
+.login-container {
+  display: flex;
+  width: 1100px;
+  background: #fff;
+  border-radius: 0;
+  box-shadow: none;
+  overflow: hidden;
+}
+
+.login-img-section {
+  flex: 1.2;
+  background: #e3f1f7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 600px;
+  min-width: 0;
+}
+
+.login-img {
+  width: 95%;
+  max-width: 500px;
+  object-fit: contain;
+  border-radius: 0;
+}
+
+.login-form-section {
+  flex: 1;
+  padding: 90px 60px 60px 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: #fff;
+}
+
+.login-title {
+  font-size: 2.3rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: #111;
+  letter-spacing: 1px;
+  font-family: 'Inter', Arial, sans-serif;
+}
+
+.login-subtitle {
+  font-size: 1.05rem;
+  color: #222;
+  margin-bottom: 32px;
+  font-family: 'Inter', Arial, sans-serif;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.login-input {
+  border: none;
+  border-bottom: 2px solid #d1d1d1;
+  padding: 12px 0;
+  font-size: 1rem;
+  outline: none;
+  background: transparent;
+  transition: border-color 0.2s;
+  font-family: 'Inter', Arial, sans-serif;
+}
+
+.login-input:focus {
+  border-bottom: 2px solid #e07575;
+}
+
+.login-btn-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 18px;
+}
+
+.login-btn {
+  background: #e07575;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 12px 48px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+  font-family: 'Inter', Arial, sans-serif;
+}
+
+.login-btn:disabled {
+  background: #f3bcbc;
+  cursor: not-allowed;
+}
+
+.forgot-link {
+  color: #e07575;
+  text-decoration: none;
+  font-size: 1rem;
+  transition: text-decoration 0.2s;
+  font-family: 'Inter', Arial, sans-serif;
+}
+
+.forgot-link:hover {
+  text-decoration: underline;
+}

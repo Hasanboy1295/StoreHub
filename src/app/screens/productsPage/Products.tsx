@@ -1,383 +1,265 @@
-import * as React from "react";
+import React from "react";
 import {
-  Badge,
   Box,
   Button,
-  colors,
-  Container,
-  Input,
-  PaginationItem,
-  Stack,
+  Card,
+  CardContent,
+  CardMedia,
+  IconButton,
+  Rating,
+  Typography,
 } from "@mui/material";
-import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
-import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
-import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
-import Pagination from "@mui/material/Pagination";
-
-import { useDispatch, useSelector } from "react-redux";
-import { Dispatch } from "@reduxjs/toolkit";
-import { setProducts } from "./slice";
-import { createSelector } from "reselect";
-import { retrieveProducts } from "./selector";
-import { Product, ProductInquiry } from "../../../lib/types/product";
-import { useEffect, useState } from "react";
-import ProductService from "../../services/ProductService";
-import { ProductCollection } from "../../../lib/enums/product.enum";
-import { serverApi } from "../../../lib/config";
-import { ArrowBack } from "@mui/icons-material";
-import { useHistory } from "react-router-dom";
+import { useHistory, useRouteMatch } from "react-router-dom";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
+import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import { CartItem } from "../../../lib/types/search";
-
-/* reduxe slice selector */
-
-const actionDispatch = (dispatch: Dispatch) => ({
-  setProducts: (data: Product[]) => dispatch(setProducts(data)),
-});
-
-const productsRetriever = createSelector(retrieveProducts, (products) => ({
-  products,
-}));
+import "./Product.css";
 
 interface ProductsProps {
   onAdd: (item: CartItem) => void;
 }
 
-export default function Products(props: ProductsProps) {
-  const { onAdd } = props;
-  const { setProducts } = actionDispatch(useDispatch());
-  const { products } = useSelector(productsRetriever);
-  const [productSearch, setProductSearch] = useState<ProductInquiry>({
-    page: 1,
-    limit: 2,
-    order: "createdAt",
-    productCollection: ProductCollection.DISH,
-    search: "",
-  });
+interface ProductItem {
+  id: number;
+  title: string;
+  image: string;
+  price: number;
+  oldPrice?: number;
+  badge?: string;
+  rating?: number;
+  reviews?: number;
+}
 
+const wishlist: ProductItem[] = [
+  {
+    id: 1,
+    title: "Gucci duffle bag",
+    image: "https://via.placeholder.com/300x200",
+    price: 960,
+    oldPrice: 1160,
+    badge: "-35%",
+  },
+  {
+    id: 2,
+    title: "RGB liquid CPU Cooler",
+    image: "https://via.placeholder.com/300x200",
+    price: 1960,
+  },
+  {
+    id: 3,
+    title: "GP11 Shooter USB Gamepad",
+    image: "https://via.placeholder.com/300x200",
+    price: 550,
+  },
+  {
+    id: 4,
+    title: "Quilted Satin Jacket",
+    image: "https://via.placeholder.com/300x200",
+    price: 750,
+  },
+];
+
+const recommended: ProductItem[] = [
+  {
+    id: 5,
+    title: "ASUS FHD Gaming Laptop",
+    image: "https://via.placeholder.com/300x200",
+    price: 960,
+    oldPrice: 1160,
+    badge: "-35%",
+    rating: 5,
+    reviews: 65,
+  },
+  {
+    id: 6,
+    title: "IPS LCD Gaming Monitor",
+    image: "https://via.placeholder.com/300x200",
+    price: 1160,
+    rating: 5,
+    reviews: 65,
+  },
+  {
+    id: 7,
+    title: "HAVIT HV-G92 Gamepad",
+    image: "https://via.placeholder.com/300x200",
+    price: 560,
+    badge: "NEW",
+    rating: 5,
+    reviews: 65,
+  },
+  {
+    id: 8,
+    title: "AK-900 Wired Keyboard",
+    image: "https://via.placeholder.com/300x200",
+    price: 200,
+    rating: 5,
+    reviews: 65,
+  },
+];
+
+const Product: React.FC<ProductsProps> = ({ onAdd }) => {
   const history = useHistory();
+  const match = useRouteMatch();
 
-  const [searchText, setSearchtext] = useState<string>("");
-
-  useEffect(() => {
-    const product = new ProductService();
-    product
-      .getProducts(productSearch)
-      .then((data) => setProducts(data))
-      .catch((err) => console.log(err));
-  }, [productSearch]);
-
-  useEffect(() => {
-    if (searchText === "") {
-      productSearch.search = "";
-      setProductSearch({ ...productSearch });
-    }
-  }, [searchText]);
-
-  /* HANDLER */
-  const searchCollectionHandler = (collection: ProductCollection) => {
-    productSearch.page = 1;
-    productSearch.productCollection = collection;
-    setProductSearch({ ...productSearch });
+  const handleProductClick = (productId: number) => {
+    history.push(`${match.path}/${productId}`);
   };
 
-  const searchOrderHandler = (order: string) => {
-    productSearch.page = 1;
-    productSearch.order = order;
-    setProductSearch({ ...productSearch });
-  };
-
-  const searchProductHandler = () => {
-    productSearch.search = searchText;
-    setProductSearch({ ...productSearch });
-  };
-
-  const paginationHandler = (e: React.ChangeEvent<any>, value: number) => {
-    productSearch.page = value;
-    setProductSearch({ ...productSearch });
-  };
-
-  const chooseDishHandler = (id: string) => {
-    history.push(`/products/${id}`);
+  const handleAddToCart = (item: ProductItem, e: React.MouseEvent) => {
+    e.stopPropagation();
+    onAdd({
+      _id: item.id.toString(),
+      name: item.title,
+      price: item.price,
+      image: item.image,
+      quantity: 1,
+    });
   };
 
   return (
-    <div className="product-frame">
-      <Container>
-        <Stack className="main">
-          <Stack className="top-title-input">
-            <Box className="title">Burak Restaurant</Box>
-            <Stack className="input-butt-box">
-              <Input
-                className="input"
-                placeholder="Type here"
-                type={"search"}
-                value={searchText}
-                onChange={(e) => setSearchtext(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") searchProductHandler();
-                }}
-                disableUnderline
-                sx={{
-                  border: "none",
-                  borderRadius: "8px",
-                  marginRight: "70px",
-                }}
+    <Box className="product-page">
+      {/* Wishlist section */}
+      <Box className="section-header">
+        <Box className="section-title">
+          <span className="title-indicator"></span>
+          <Typography variant="h6">Wishlist ({wishlist.length})</Typography>
+        </Box>
+        <Button variant="outlined" className="section-btn">
+          Move All To Bag
+        </Button>
+      </Box>
+
+      <Box className="product-grid">
+        {wishlist.map((item) => (
+          <Card key={item.id} className="product-card">
+            <Box 
+              className="card-image-container"
+              onClick={() => handleProductClick(item.id)}
+              style={{ cursor: "pointer" }}
+            >
+              {item.badge && <span className="badge">{item.badge}</span>}
+              <IconButton 
+                className="action-btn delete-btn"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <DeleteOutlineIcon />
+              </IconButton>
+              <CardMedia
+                component="img"
+                image={item.image}
+                alt={item.title}
+                className="product-image"
               />
               <Button
-                className="searching-button"
-                variant={"contained"}
-                color={"primary"}
-                onClick={searchProductHandler}
-              >
-                Search
-                <SearchOutlinedIcon />
-              </Button>
-            </Stack>
-          </Stack>
-          <Stack className="product-butt-img">
-            <Stack className="top-butt-box">
-              <Button
+                fullWidth
                 variant="contained"
-                color={
-                  productSearch.order === "createdAt" ? "primary" : "secondary"
-                }
-                onClick={() => searchOrderHandler("createdAt")}
+                className="add-cart-btn"
+                startIcon={<ShoppingCartOutlinedIcon />}
+                onClick={(e) => handleAddToCart(item, e)}
               >
-                New
+                Add To Cart
               </Button>
-
-              <Button
-                variant="contained"
-                color={
-                  productSearch.order === "productPrice"
-                    ? "primary"
-                    : "secondary"
-                }
-                onClick={() => searchOrderHandler("productPrice")}
+            </Box>
+            <CardContent className="card-content">
+              <Typography 
+                className="product-title"
+                onClick={() => handleProductClick(item.id)}
+                style={{ cursor: "pointer" }}
               >
-                Price
-              </Button>
-
-              <Button
-                variant="contained"
-                color={
-                  productSearch.order === "productViews"
-                    ? "primary"
-                    : "secondary"
-                }
-                onClick={() => searchOrderHandler("productViews")}
-              >
-                Views
-              </Button>
-            </Stack>
-            <Stack className="butt-swiper-box">
-              <Stack className="left-butt-box">
-                <Button
-                  variant="contained"
-                  color={
-                    productSearch.productCollection === ProductCollection.DISH
-                      ? "primary"
-                      : "secondary"
-                  }
-                  className="rotate"
-                  onClick={() =>
-                    searchCollectionHandler(ProductCollection.DISH)
-                  }
-                >
-                  Dish
-                </Button>
-
-                <Button
-                  variant="contained"
-                  color={
-                    productSearch.productCollection === ProductCollection.SALAD
-                      ? "primary"
-                      : "secondary"
-                  }
-                  className="rotate"
-                  onClick={() =>
-                    searchCollectionHandler(ProductCollection.SALAD)
-                  }
-                >
-                  Salad
-                </Button>
-
-                <Button
-                  variant="contained"
-                  color={
-                    productSearch.productCollection === ProductCollection.DRINK
-                      ? "primary"
-                      : "secondary"
-                  }
-                  className="rotate"
-                  onClick={() =>
-                    searchCollectionHandler(ProductCollection.DRINK)
-                  }
-                >
-                  Drink{" "}
-                </Button>
-                <Button
-                  variant="contained"
-                  color={
-                    productSearch.productCollection ===
-                    ProductCollection.DESSERT
-                      ? "primary"
-                      : "secondary"
-                  }
-                  className="rotate"
-                  onClick={() =>
-                    searchCollectionHandler(ProductCollection.DESSERT)
-                  }
-                >
-                  Desert
-                </Button>
-
-                <Button
-                  variant="contained"
-                  color={
-                    productSearch.productCollection === ProductCollection.OTHER
-                      ? "primary"
-                      : "secondary"
-                  }
-                  className="rotate"
-                  onClick={() =>
-                    searchCollectionHandler(ProductCollection.OTHER)
-                  }
-                >
-                  Other
-                </Button>
-              </Stack>
-              <Stack className="wrap-box">
-                {products.length !== 0 ? (
-                  products.map((product: Product) => {
-                    const imagePath = `${serverApi}/${product.productImages[0]}`;
-                    const sizeVolume =
-                      product.productCollection === ProductCollection.DRINK
-                        ? product.productVolume + "liter"
-                        : product.productSize + "size";
-                    return (
-                      <Stack className="product-img-box">
-                        <Stack
-                          key={product._id}
-                          className={"full-img-box"}
-                          onClick={() => chooseDishHandler(product._id)}
-                        >
-                          <Stack
-                            className="image-box"
-                            sx={{
-                              backgroundImage: `url(${imagePath})`,
-                            }}
-                          >
-                            <div className="product-sale">{sizeVolume}</div>
-                            <Stack className="view-basket-box">
-                              <Button
-                                className="shop-basket"
-                                onClick={(e) => {
-                                  onAdd({
-                                    _id: product._id,
-                                    quantity: 1,
-                                    name: product.productName,
-                                    price: product.productPrice,
-                                    image: product.productImages[0],
-                                  });
-                                  e.stopPropagation();
-                                }}
-                              >
-                                <img src={"/icons/shopping-cart.svg"} />
-                              </Button>
-                              <Button className="view-bnt" sx={{}}>
-                                <Badge
-                                  badgeContent={product.productViews}
-                                  color="secondary"
-                                >
-                                  <RemoveRedEyeIcon
-                                    sx={{
-                                      color:
-                                        product.productViews === 0
-                                          ? "gray"
-                                          : "white",
-                                    }}
-                                  />
-                                </Badge>
-                              </Button>
-                            </Stack>
-                          </Stack>
-                          <Stack className="imgage-title-box">
-                            <span className="prd-name">
-                              {product.productName}
-                            </span>
-                            <div className="product-cost">
-                              <MonetizationOnIcon />
-                              {product.productPrice}
-                            </div>
-                          </Stack>
-                        </Stack>
-                      </Stack>
-                    );
-                  })
-                ) : (
-                  <Box className="no-data">New products are not available</Box>
+                {item.title}
+              </Typography>
+              <Box className="price-row">
+                <span className="price">${item.price}</span>
+                {item.oldPrice && (
+                  <span className="old-price">${item.oldPrice}</span>
                 )}
-              </Stack>
-            </Stack>
-          </Stack>
-          <Stack spacing={2} className="pagination">
-            <Pagination
-              count={
-                products.length != 0
-                  ? productSearch.page + 1
-                  : productSearch.page
-              }
-              page={productSearch.page}
-              className="pagination-num"
-              onChange={paginationHandler}
-            />
-          </Stack>
-        </Stack>
-      </Container>
-      <div className="burak-img">
-        <Container>
-          <Stack className="main-burak-box">
-            <Box className="title-burak-box">Our Family Brand</Box>
-            <Stack className="br-img-boxes">
-              <Stack className="burak-card">
-                <Box className="burak-img-card">
-                  <img src="/img/kebab-fresh.webp" alt="" />
-                </Box>
-              </Stack>
-              <Stack className="burak-card">
-                <Box className="burak-img-card">
-                  <img src="/img/kebab-fresh.webp" alt="" />
-                </Box>
-              </Stack>
-              <Stack className="burak-card">
-                <Box className="burak-img-card">
-                  <img src="/img/kebab-fresh.webp" alt="" />
-                </Box>
-              </Stack>
-              <Stack className="burak-card">
-                <Box className="burak-img-card">
-                  <img src="/img/kebab-fresh.webp" alt="" />
-                </Box>
-              </Stack>
-            </Stack>
-          </Stack>
-        </Container>
-      </div>
-      <div className="adress">
-        <Container>
-          <Stack className="adress-area">
-            <Box className="title-adress">Our adress</Box>
+              </Box>
+            </CardContent>
+          </Card>
+        ))}
+      </Box>
 
-            <iframe
-              style={{ marginTop: "60px" }}
-              src="https://www.google.com/maps?q=36.623494,127.446876&z=15&output=embed"
-              width="1320"
-              height="500"
-            ></iframe>
-          </Stack>
-        </Container>
-      </div>
-    </div>
+      {/* Just for you */}
+      <Box className="section-header just-for-you-header">
+        <Box className="section-title">
+          <span className="title-indicator"></span>
+          <Typography variant="h6">Just For You</Typography>
+        </Box>
+        <Button variant="outlined" className="section-btn">
+          See All
+        </Button>
+      </Box>
+
+      <Box className="product-grid">
+        {recommended.map((item) => (
+          <Card key={item.id} className="product-card">
+            <Box 
+              className="card-image-container"
+              onClick={() => handleProductClick(item.id)}
+              style={{ cursor: "pointer" }}
+            >
+              {item.badge && (
+                <span className={`badge ${item.badge === "NEW" ? "new-badge" : ""}`}>
+                  {item.badge}
+                </span>
+              )}
+              <IconButton 
+                className="action-btn view-btn"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleProductClick(item.id);
+                }}
+              >
+                <VisibilityOutlinedIcon />
+              </IconButton>
+              <CardMedia
+                component="img"
+                image={item.image}
+                alt={item.title}
+                className="product-image"
+              />
+              <Button
+                fullWidth
+                variant="contained"
+                className="add-cart-btn"
+                startIcon={<ShoppingCartOutlinedIcon />}
+                onClick={(e) => handleAddToCart(item, e)}
+              >
+                Add To Cart
+              </Button>
+            </Box>
+            <CardContent className="card-content">
+              <Typography 
+                className="product-title"
+                onClick={() => handleProductClick(item.id)}
+                style={{ cursor: "pointer" }}
+              >
+                {item.title}
+              </Typography>
+              <Box className="price-row">
+                <span className="price">${item.price}</span>
+                {item.oldPrice && (
+                  <span className="old-price">${item.oldPrice}</span>
+                )}
+              </Box>
+              {item.rating && (
+                <Box className="rating-row">
+                  <Rating
+                    value={item.rating}
+                    readOnly
+                    size="small"
+                    className="product-rating"
+                  />
+                  <span className="reviews">({item.reviews})</span>
+                </Box>
+              )}
+            </CardContent>
+          </Card>
+        ))}
+      </Box>
+    </Box>
   );
-}
+};
+
+export default Product;

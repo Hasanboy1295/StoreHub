@@ -1,0 +1,133 @@
+.signup-page {
+  background: #fff;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.signup-container {
+  display: flex;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  max-width: 900px;
+  width: 100%;
+  margin: 60px auto;
+  overflow: hidden;
+}
+
+.signup-img-section {
+  flex: 1;
+  background: #f6f6f6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 400px;
+  min-height: 500px;
+}
+
+.signup-img {
+  width: 100%;
+  max-width: 400px;
+  object-fit: cover;
+  border-radius: 0;
+}
+
+.signup-form-section {
+  flex: 1;
+  padding: 48px 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.signup-title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.signup-subtitle {
+  color: #888;
+  font-size: 1.1rem;
+  margin-bottom: 32px;
+}
+
+.signup-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-bottom: 24px;
+}
+
+.signup-input {
+  padding: 12px 16px;
+  font-size: 1rem;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  background: #fafafa;
+  outline: none;
+  transition: border 0.2s;
+}
+
+.signup-input:focus {
+  border-color: #ff4d4f;
+}
+
+.signup-btn {
+  padding: 14px 0;
+  background: #ff4d4f;
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: background 0.2s;
+}
+
+.signup-btn:hover {
+  background: #d32f2f;
+}
+
+.google-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 12px 0;
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  font-size: 1.05rem;
+  font-weight: 500;
+  cursor: pointer;
+  margin-bottom: 18px;
+  margin-top: 8px;
+  transition: border 0.2s;
+}
+
+.google-btn:hover {
+  border-color: #ff4d4f;
+}
+
+.google-icon {
+  width: 22px;
+  height: 22px;
+}
+
+.signup-login-link {
+  text-align: center;
+  color: #888;
+  font-size: 1rem;
+  margin-top: 12px;
+}
+
+.signup-login-link a {
+  color: #222;
+  text-decoration: underline;
+  margin-left: 4px;
+  font-weight: 500;
+}

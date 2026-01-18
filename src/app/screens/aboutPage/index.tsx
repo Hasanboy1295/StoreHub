@@ -1,7 +1,5 @@
 import React from "react";
-import { Box, Container, Stack } from "@mui/material";
-import ActiveUsers from "./index"; // Adjust path if needed
-
+import { Container } from "@mui/material";
 import "../../../css/help.css";
 
 const stats = [
@@ -49,17 +47,33 @@ const team = [
   },
 ];
 
+// Example icon URLs (replace with your own if you want)
+const socialIcons = {
+  twitter: "https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/twitter.svg",
+  instagram: "https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/instagram.svg",
+  linkedin: "https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/linkedin.svg",
+};
+
 export default function AboutPage() {
   return (
     <div className="about-page">
       <Container>
         <div className="about-container">
+          {/* Top section: Story and Image */}
           <div style={{ display: "flex", gap: 40, alignItems: "center" }}>
             <div style={{ flex: 1 }}>
               <h2 className="about-title">Our Story</h2>
               <p className="about-desc">
-                Launched in 2015, Exclusive is South Asia’s premier online shopping marketplace with an active presence in Bangladesh. Supported by wide range of tailored marketing, data and service solutions, Exclusive has 10,500 sellers and 300 brands and serves 3 million customers across the region.<br /><br />
-                Exclusive has more than 1 Million products to offer, growing at a very fast. Exclusive offers a diverse assortment in categories ranging from consumer.
+                Launched in 2015, Exclusive is South Asia’s premier online shopping
+                marketplace with an active presence in Bangladesh. Supported by
+                wide range of tailored marketing, data and service solutions,
+                Exclusive has 10,500 sellers and 300 brands and serves 3 million
+                customers across the region.
+                <br />
+                <br />
+                Exclusive has more than 1 Million products to offer, growing at a
+                very fast. Exclusive offers a diverse assortment in categories
+                ranging from consumer.
               </p>
             </div>
             <div style={{ flex: 1 }}>
@@ -78,8 +92,9 @@ export default function AboutPage() {
             </div>
           </div>
 
+          {/* Stats row */}
           <div className="about-stats-row">
-            {stats.map((stat, idx) => (
+            {stats.map((stat) => (
               <div
                 key={stat.label}
                 className={`about-stat-card${stat.highlight ? " about-stat-card--highlight" : ""}`}
@@ -91,8 +106,9 @@ export default function AboutPage() {
             ))}
           </div>
 
+          {/* Team row */}
           <div className="about-team-row">
-            {team.map((member, idx) => (
+            {team.map((member) => (
               <div className="about-team-card" key={member.name}>
                 <img
                   src={member.img}
@@ -102,19 +118,27 @@ export default function AboutPage() {
                 <div className="about-team-name">{member.name}</div>
                 <div className="about-team-role">{member.role}</div>
                 <div className="about-team-socials">
-                  <i className="fa fa-twitter" />
-                  <i className="fa fa-instagram" />
-                  <i className="fa fa-linkedin" />
+                  <img
+                    src={socialIcons.twitter}
+                    alt="twitter"
+                    style={{ width: 22, height: 22, marginRight: 8, filter: "grayscale(1)" }}
+                  />
+                  <img
+                    src={socialIcons.instagram}
+                    alt="instagram"
+                    style={{ width: 22, height: 22, marginRight: 8, filter: "grayscale(1)" }}
+                  />
+                  <img
+                    src={socialIcons.linkedin}
+                    alt="linkedin"
+                    style={{ width: 22, height: 22, filter: "grayscale(1)" }}
+                  />
                 </div>
               </div>
             ))}
           </div>
         </div>
-        {/* Active Users section on the right side */}
-        <div style={{ marginTop: 48 }}>
-          <ActiveUsers />
-        </div>
       </Container>
     </div>
   );
-}s
+}

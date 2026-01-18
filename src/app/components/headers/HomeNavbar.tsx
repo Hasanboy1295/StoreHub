@@ -1,26 +1,33 @@
-import { Container } from "@mui/material";
-import { NavLink } from "react-router-dom";
 import React from "react";
-import { CartItem } from "../../../lib/types/search";
-import { useGlobals } from "../../hooks/useGlobals";
+import {
+  Box,
+  Button,
+  Container,
+  Stack,
+  Menu,
+  MenuItem,
+  Divider,
+} from "@mui/material";
+import { NavLink, useHistory } from "react-router-dom";
+
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
-import PersonIcon from "@mui/icons-material/Person";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import AssignmentIcon from "@mui/icons-material/Assignment";
-import CancelIcon from "@mui/icons-material/Cancel";
-import StarBorderIcon from "@mui/icons-material/StarBorder";
-import LogoutIcon from "@mui/icons-material/Logout";
-import LoginIcon from "@mui/icons-material/Login";
+import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
+import Inventory2OutlinedIcon from "@mui/icons-material/Inventory2Outlined";
+import RateReviewOutlinedIcon from "@mui/icons-material/RateReviewOutlined";
+import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
+
+import { CartItem } from "../../../lib/types/search";
+import { useGlobals } from "../../hooks/useGlobals";
+import { serverApi } from "../../../lib/config";
+
+import Basket from "./Basket";
 import "../../../css/navbar.css";
 
+/* ================= PROPS ================= */
+
 interface HomeNavbarProps {
-  cartItems: CartItem[];
+ cartItems: CartItem[];
   onAdd: (item: CartItem) => void;
   onRemove: (item: CartItem) => void;
   onDelete: (item: CartItem) => void;
@@ -33,255 +40,144 @@ interface HomeNavbarProps {
   handleLogoutRequest: () => void;
 }
 
-export default function HomeNavbar(props: HomeNavbarProps) {
-  const { setLoginOpen, handleLogoutRequest } = props;
+/* ================= COMPONENT ================= */
+
+export default function HomeNavbar({
+  cartItems,
+  onAdd,
+  onRemove,
+  onDelete,
+  onDeleteAll,
+  setSignupOpen,
+  handleLogoutRequest,
+}: HomeNavbarProps) {
   const { authMember } = useGlobals();
+  const history = useHistory();
 
-  const [menuAnchorEl, setMenuAnchorEl] = React.useState<null | HTMLElement>(null);
-  const menuOpen = Boolean(menuAnchorEl);
+  /* USER MENU */
+  const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
+  const open = Boolean(anchorEl);
 
-  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setMenuAnchorEl(event.currentTarget);
+  const handleUserMenuOpen = (e: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(e.currentTarget);
   };
-  const handleMenuClose = () => {
-    setMenuAnchorEl(null);
+
+  const handleUserMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const goTo = (path: string) => {
+    handleUserMenuClose();
+    history.push(path);
+  };
+
+  const logout = () => {
+    handleUserMenuClose();
+    handleLogoutRequest();
   };
 
   return (
     <div className="home-navbar">
-      {/* Top announcement bar */}
-      <div className="top-navba">
-        <Container maxWidth="lg" className="top-inner">
-          <div className="summ">
+      <Container className="navbar-container">
+
+        {/* TOP BAR */}
+        <div className="top-bar">
+          <span className="top-bar-text">
             Summer Sale For All Swim Suits And Free Express Delivery - OFF 50%!
-          </div>
-          <div className="top-actions">
-            <NavLink
-              to="/products"
-              className={(isActive: boolean) =>
-                isActive ? "shop-now-link active" : "shop-now-link"
-              }
-            >
-              ShopNow
-            </NavLink>
-            <div className="lang">
-              <div className="language">English</div>
-              <div className="langsvg" aria-hidden>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="14"
-                  height="14"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                >
-                  <path
-                    d="M12.364 12.95L17.314 8L18.728 9.414L12.364 15.778L6.00003 9.414L7.41403 8L12.364 12.95Z"
-                    fill="white"
-                  />
-                </svg>
-              </div>
-            </div>
-          </div>
-        </Container>
-      </div>
+          </span>
+          <span className="top-bar-shop">ShopNow</span>
+        </div>
 
-      {/* Main navbar section */}
-      <Container maxWidth="lg" className="navbar-container">
-        <div className="navbar-top-row">
-          <div className="brand">Exclusive</div>
-          <nav className="nav-links">
-            <NavLink
-              to="/"
-              className={(isActive: boolean) =>
-                isActive ? "nav-link active" : "nav-link"
-              }
-            >
-              Home
-            </NavLink>
-            <NavLink
-              to="/contact"
-              className={(isActive: boolean) =>
-                isActive ? "nav-link active" : "nav-link"
-              }
-            >
-              Product
-            </NavLink>
-            <NavLink
-              to="/about"
-              className={(isActive: boolean) =>
-                isActive ? "nav-link active" : "nav-link"
-              }
-            >
-              About
-            </NavLink>
-            <NavLink
-              to="/signup"
-              className={(isActive: boolean) =>
-                isActive ? "nav-link active" : "nav-link"
-              }
-            >
-              Sign Up
-            </NavLink>
-          </nav>
-          <div className="navbar-actions">
-            <div className="search-box">
-              <input
-                type="text"
-                placeholder="What are you looking for?"
-                className="search-input"
-              />
-              <button className="search-btn" aria-label="search">
-                <SearchOutlinedIcon />
-              </button>
-            </div>
-            <button className="icon-btn" aria-label="wishlist">
-              <FavoriteBorderIcon />
-            </button>
-            <button className="icon-btn" aria-label="cart">
-              <ShoppingCartOutlinedIcon />
-            </button>
-            {/* Person Icon Button */}
-            <button
-              className="icon-btn"
-              aria-label="account"
-              onClick={handleMenuOpen}
-              style={{ position: "relative" }}
-            >
-              <PersonIcon />
-            </button>
-         <Menu
-  anchorEl={menuAnchorEl}
-  open={menuOpen}
-  onClose={handleMenuClose}
-  anchorOrigin={{
-    vertical: "bottom",
-    horizontal: "right",
-  }}
-  transformOrigin={{
-    vertical: "top",
-    horizontal: "right",
-  }}
-  slotProps={{
-    paper: { className: "account-menu" }
-  }}
+        {/* NAVBAR */}
+        <Stack direction="row" alignItems="center" justifyContent="space-between">
+
+          <NavLink to="/" className="brand-text">
+            Exclusive
+          </NavLink>
+
+          <Stack direction="row" spacing={4} alignItems="center">
+            <NavLink to="/" className="nav-link">Home</NavLink>
+            <NavLink to="/products" className="nav-link">Products</NavLink>
+            <NavLink to="/about" className="nav-link">About</NavLink>
+
+            {!authMember ? (
+        <Button
+  variant="contained"
+  onClick={() => history.push("/signup")}
 >
-  <MenuItem onClick={handleMenuClose}>
-    <ListItemIcon>
-      <AccountCircleIcon fontSize="small" />
-    </ListItemIcon>
-    <ListItemText>Manage My Account</ListItemText>
-  </MenuItem>
-  <MenuItem onClick={handleMenuClose}>
-    <ListItemIcon>
-      <AssignmentIcon fontSize="small" />
-    </ListItemIcon>
-    <ListItemText>My Order</ListItemText>
-  </MenuItem>
-  <MenuItem onClick={handleMenuClose}>
-    <ListItemIcon>
-      <CancelIcon fontSize="small" />
-    </ListItemIcon>
-    <ListItemText>My Cancellations</ListItemText>
-  </MenuItem>
-  <MenuItem onClick={handleMenuClose}>
-    <ListItemIcon>
-      <StarBorderIcon fontSize="small" />
-    </ListItemIcon>
-    <ListItemText>My Reviews</ListItemText>
-  </MenuItem>
-  <MenuItem onClick={() => { handleMenuClose(); setLoginOpen(true); }}>
-    <ListItemIcon>
-      <LoginIcon fontSize="small" />
-    </ListItemIcon>
-    <ListItemText>Login</ListItemText>
-  </MenuItem>
-  <MenuItem onClick={() => { handleMenuClose(); handleLogoutRequest(); }}>
-    <ListItemIcon>
-      <LogoutIcon fontSize="small" />
-    </ListItemIcon>
-    <ListItemText>Logout</ListItemText>
-  </MenuItem>
-</Menu>
-          </div>
-        </div>
-      </Container>
+  Sign Up
+</Button>
 
-      {/* Sidebar + Hero section */}
-      <Container maxWidth="lg" className="navbar-container-main">
-        <div className="main-content-wrapper">
-          {/* Left sidebar with categories */}
-          <aside className="sidebar-categories">
-            <div className="category-item">
-              <span>Woman's Fashion</span>
-              <span className="arrow">&gt;</span>
+            ) : (
+              <NavLink to="/orders" className="nav-link underline">
+                Orders
+              </NavLink>
+            )}
+          </Stack>
+
+          <Stack direction="row" spacing={2} alignItems="center">
+
+            <div className="search-box">
+              <input placeholder="What are you looking for?" />
+              <SearchOutlinedIcon />
             </div>
-            <div className="category-item">
-              <span>Men's Fashion</span>
-              <span className="arrow">&gt;</span>
-            </div>
-            <div className="category-item">
-              <span>Electronics</span>
-              <span className="arrow">&gt;</span>
-            </div>
-            <div className="category-item">
-              <span>Home & Lifestyle</span>
-              <span className="arrow">&gt;</span>
-            </div>
-            <div className="category-item">
-              <span>Medicine</span>
-              <span className="arrow">&gt;</span>
-            </div>
-            <div className="category-item">
-              <span>Sports & Outdoor</span>
-              <span className="arrow">&gt;</span>
-            </div>
-            <div className="category-item">
-              <span>Baby's & Toys</span>
-              <span className="arrow">&gt;</span>
-            </div>
-            <div className="category-item">
-              <span>Groceries & Pets</span>
-              <span className="arrow">&gt;</span>
-            </div>
-            <div className="category-item">
-              <span>Health & Beauty</span>
-              <span className="arrow">&gt;</span>
-            </div>
-          </aside>
-          {/* Hero / Banner section */}
-          <div className="hero-banner">
-            <div className="banner-badge">Frame 560</div>
-            <div className="banner-content">
-              <div className="banner-left">
-                <div className="banner-logo">🍎</div>
-                <div className="banner-model">iPhone 14 Series</div>
-                <div className="banner-title">Up to 10%<br />off Voucher</div>
-                <a href="#" className="banner-link">Shop Now →</a>
-              </div>
-              <div className="banner-right">
-                <img src="/img/iphone.png" alt="iPhone" className="banner-image" />
-              </div>
-            </div>
-            <div className="banner-dots">
-              <span className="dot"></span>
-              <span className="dot"></span>
-              <span className="dot active"></span>
-              <span className="dot"></span>
-              <span className="dot"></span>
-            </div>
-          </div>
-        </div>
+           {/* like */}
+
+            <FavoriteBorderIcon className="icon-btn" />
+
+            <Basket
+              cartItems={cartItems}
+              onAdd={onAdd}
+              onRemove={onRemove}
+              onDelete={onDelete}
+              onDeleteAll={onDeleteAll}
+            />
+
+            {/* USER */}
+            {authMember && (
+              <>
+                <img
+                  className="user-avatar"
+                  src={
+                    authMember.memberImage
+                      ? `${serverApi}/${authMember.memberImage}`
+                      : "/icons/default-user.svg"
+                  }
+                  onClick={handleUserMenuOpen}
+                  alt="user"
+                />
+
+                <Menu
+                  anchorEl={anchorEl}
+                  open={open}
+                  onClose={handleUserMenuClose}
+                  anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+                  transformOrigin={{ vertical: "top", horizontal: "right" }}
+                  PaperProps={{ className: "account-menu" }}
+                >
+                  <MenuItem onClick={() => goTo("/member-page")}>
+                    <PersonOutlineIcon /> Manage My Account
+                  </MenuItem>
+
+                  <MenuItem onClick={() => goTo("/orders")}>
+                    <Inventory2OutlinedIcon /> My Orders
+                  </MenuItem>
+
+                  <MenuItem onClick={() => goTo("/reviews")}>
+                    <RateReviewOutlinedIcon /> My Reviews
+                  </MenuItem>
+
+                  <Divider />
+
+                  <MenuItem onClick={logout} className="logout-item">
+                    <LogoutOutlinedIcon /> Logout
+                  </MenuItem>
+                </Menu>
+              </>
+            )}
+          </Stack>
+        </Stack>
       </Container>
     </div>
   );
 }
-
-
-
-
-
-
-
-
-
-
