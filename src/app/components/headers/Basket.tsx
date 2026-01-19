@@ -4,7 +4,7 @@ import IconButton from "@mui/material/IconButton";
 import Badge from "@mui/material/Badge";
 import Menu from "@mui/material/Menu";
 import CancelIcon from "@mui/icons-material/Cancel";
-
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { useHistory } from "react-router-dom";
@@ -101,8 +101,8 @@ export default function Basket(props: BasketProps) {
       <div className="basket-float">
         <div className="basket-float-header">
           <span>Cart</span>
-          <button className="basket-float-clear" onClick={onDeleteAll}>
-            <span>&#10005;</span>
+          <button className="basket-float-clear" onClick={onDeleteAll} title="Clear all">
+            <DeleteOutlineIcon style={{ fontSize: 18 }} />
           </button>
         </div>
         <div className="basket-float-list">

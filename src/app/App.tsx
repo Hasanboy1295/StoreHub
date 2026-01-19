@@ -81,7 +81,9 @@ function App() {
       )}
 
       <Switch>
-        <Route exact path="/" component={HomePage} />
+        <Route exact path="/">
+          <HomePage onAdd={onAdd} />
+        </Route>
 
         <Route path="/products">
           <ProductsPage onAdd={onAdd} />

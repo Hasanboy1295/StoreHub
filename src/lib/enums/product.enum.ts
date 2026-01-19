@@ -19,10 +19,11 @@ export enum ProductStatus {
   DELETE = "DELETE",
 }
 
+
 export enum ProductCollection {
-  DISH = "DISH",
-  SALAD = "SALAD",
-  DESSERT = "DESEERT",
-  DRINK = "DRINK",
+  PHONE = "PHONE",
+  COMPUTER = "COMPUTER",
+  SMARTWATCH = "SMARTWATCH",
+  CAMERA = "CAMERA",
   OTHER = "OTHER",
 }

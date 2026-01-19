@@ -1,41 +1,52 @@
 import React, { useState } from "react";
-import { Box, Container, Stack, Button } from "@mui/material";
+import { Container } from "@mui/material";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import { useHistory } from "react-router-dom";
+import { ProductCollection } from "../../../lib/enums/product.enum";
 
 export default function PopularDishes() {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const history = useHistory();
 
+  // Map category names to ProductCollection enum values
+  // Categories not in ProductCollection (Headphones, Gaming) will go to OTHER
   const categories = [
     {
       id: 1,
       name: "Phones",
       icon: "📱",
+      collection: ProductCollection.PHONE,
     },
     {
       id: 2,
       name: "Computers",
       icon: "🖥️",
+      collection: ProductCollection.COMPUTER,
     },
     {
       id: 3,
       name: "SmartWatch",
       icon: "⌚",
+      collection: ProductCollection.SMARTWATCH,
     },
     {
       id: 4,
       name: "Camera",
       icon: "📷",
+      collection: ProductCollection.CAMERA,
     },
     {
       id: 5,
       name: "Headphones",
       icon: "🎧",
+      collection: ProductCollection.OTHER, // No Headphones in enum, use OTHER
     },
     {
       id: 6,
       name: "Gaming",
       icon: "🎮",
+      collection: ProductCollection.OTHER, // No Gaming in enum, use OTHER
     },
   ];
 
@@ -48,6 +59,11 @@ export default function PopularDishes() {
 
   const handleNext = () => {
     setCurrentIndex(Math.min(maxIndex, currentIndex + 1));
+  };
+
+  // Navigate to products page with the selected category
+  const handleCategoryClick = (collection: ProductCollection) => {
+    history.push(`/products?collection=${collection}`);
   };
 
   const visibleCategories = categories.slice(
@@ -90,6 +106,8 @@ export default function PopularDishes() {
             <div
               key={category.id}
               className={`category-card ${index === 3 ? "active" : ""}`}
+              onClick={() => handleCategoryClick(category.collection)}
+              style={{ cursor: "pointer" }}
             >
               <div className="category-icon">{category.icon}</div>
               <div className="category-name">{category.name}</div>

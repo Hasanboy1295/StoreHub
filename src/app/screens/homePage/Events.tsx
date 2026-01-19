@@ -1,33 +1,43 @@
 import React from "react";
 import { Container, Box } from "@mui/material";
+import { useHistory } from "react-router-dom";
 import "../../../css/home.css";
-import { plans } from "../../../lib/data/plans";
+import { ProductCollection } from "../../../lib/enums/product.enum";
 
 export default function Events() {
-  // take up to 4 items from plans for the layout
-   // Use hardcoded featured items with guaranteed image paths
+  const history = useHistory();
+
+  // Use hardcoded featured items with guaranteed image paths
   const featuredItems = [
     {
       img: "/img/ps5.png",
       title: "PlayStation 5",
       desc: "Black and White version of the PS5 coming out on sale.",
+      collection: ProductCollection.OTHER,
     },
     {
       img: "/img/womencollection.jpg",
       title: "Women's Collections",
       desc: "Featured woman collections that give you another vibe.",
+      collection: ProductCollection.OTHER,
     },
     {
       img: "/img/speaker.png",
       title: "Speakers",
       desc: "Amazon wireless speakers",
+      collection: ProductCollection.OTHER,
     },
     {
       img: "/img/perfume.png",
       title: "Perfume",
       desc: "GUCCI INTENSE OUD EDP",
+      collection: ProductCollection.OTHER,
     },
   ];
+
+  const handleShopNow = (collection: ProductCollection) => {
+    history.push(`/products?collection=${collection}`);
+  };
 
   const hero = featuredItems[0];
   const rightTop = featuredItems[1];
@@ -56,7 +66,12 @@ export default function Events() {
                       </div>
                       <p className="text-desc">{hero.desc}</p>
                       <div style={{ marginTop: 8 }}>
-                        <button className="events-cta">Shop Now</button>
+                        <button 
+                          className="events-cta"
+                          onClick={() => handleShopNow(hero.collection)}
+                        >
+                          Shop Now
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -72,7 +87,12 @@ export default function Events() {
                   <strong>{rightTop.title}</strong>
                   <div style={{ marginTop: 6, fontSize: 13 }}>{rightTop.desc}</div>
                   <div style={{ marginTop: 8 }}>
-                    <button className="events-cta small">Shop Now</button>
+                    <button 
+                      className="events-cta small"
+                      onClick={() => handleShopNow(rightTop.collection)}
+                    >
+                      Shop Now
+                    </button>
                   </div>
                 </Box>
               </div>
@@ -84,7 +104,12 @@ export default function Events() {
                     <strong>{rightBottomA.title}</strong>
                     <div style={{ marginTop: 6, fontSize: 12 }}>{rightBottomA.desc}</div>
                     <div style={{ marginTop: 8 }}>
-                      <button className="events-cta tiny">Shop Now</button>
+                      <button 
+                        className="events-cta tiny"
+                        onClick={() => handleShopNow(rightBottomA.collection)}
+                      >
+                        Shop Now
+                      </button>
                     </div>
                   </Box>
                 </div>
@@ -95,7 +120,12 @@ export default function Events() {
                     <strong>{rightBottomB.title}</strong>
                     <div style={{ marginTop: 6, fontSize: 12 }}>{rightBottomB.desc}</div>
                     <div style={{ marginTop: 8 }}>
-                      <button className="events-cta tiny">Shop Now</button>
+                      <button 
+                        className="events-cta tiny"
+                        onClick={() => handleShopNow(rightBottomB.collection)}
+                      >
+                        Shop Now
+                      </button>
                     </div>
                   </Box>
                 </div>

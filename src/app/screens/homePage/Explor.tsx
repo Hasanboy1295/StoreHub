@@ -1,108 +1,47 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Container, Button } from "@mui/material";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import VisibilityIcon from "@mui/icons-material/Visibility";
+import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
+import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
+import { useHistory } from "react-router-dom";
 import "../../../css/home.css";
+import { Product, ProductInquiry } from "../../../lib/types/product";
+import ProductService from "../../services/ProductService";
+import { serverApi } from "../../../lib/config";
+import { CartItem } from "../../../lib/types/search";
+import { sweetTopSuccessAlert } from "../../../lib/sweetAlert";
 
-interface Product {
-  id: string;
-  name: string;
-  price: number;
-  originalPrice: number;
-  rating: number;
-  reviews: number;
-  image: string;
-  tag?: string;
-  colors?: string[];
+interface ExploreProductsProps {
+  onAdd?: (item: CartItem) => void;
 }
 
-const exploreProducts: Product[] = [
-  {
-    id: "1",
-    name: "Breed Dry Dog Food",
-    price: 100,
-    originalPrice: 160,
-    rating: 3.5,
-    reviews: 35,
-    image: "/img/dogfood.jpg",
-  },
-  {
-    id: "2",
-    name: "CANON EOS DSLR Camera",
-    price: 360,
-    originalPrice: 500,
-    rating: 4.5,
-    reviews: 88,
-    image: "/img/camera.png",
-  },
-  {
-    id: "3",
-    name: "ASUS FHD Gaming Laptop",
-    price: 700,
-    originalPrice: 1000,
-    rating: 5,
-    reviews: 325,
-    image: "/img/laptop.png",
-  },
-  {
-    id: "4",
-    name: "Curology Product Set",
-    price: 500,
-    originalPrice: 750,
-    rating: 4,
-    reviews: 145,
-    image: "/img/crem.png",
-  },
-  {
-    id: "5",
-    name: "Kids Electric Car",
-    price: 960,
-    originalPrice: 1500,
-    rating: 5,
-    reviews: 65,
-    image: "/img/car.png",
-    tag: "NEW",
-  },
-  {
-    id: "6",
-    name: "Jr. Zoom Soccer Cleats",
-    price: 1160,
-    originalPrice: 1700,
-    rating: 5,
-    reviews: 35,
-    image: "/img/shoes.png",
-    tag: "NEW",
-    colors: ["#000", "#ff0000"],
-  },
-  {
-    id: "7",
-    name: "GPII Shooter USB Gamepad",
-    price: 660,
-    originalPrice: 1000,
-    rating: 4.5,
-    reviews: 54,
-    image: "/img/gamepad.png",
-    tag: "NEW",
-  },
-  {
-    id: "8",
-    name: "Quilted Satin Jacket",
-    price: 660,
-    originalPrice: 1000,
-    rating: 4.5,
-    reviews: 55,
-    image: "/img/jacket.png",
-    colors: ["#000", "#e67e22"],
-  },
-];
-
-export default function ExploreProducts() {
+export default function ExploreProducts({ onAdd }: ExploreProductsProps) {
+  const history = useHistory();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [likedProducts, setLikedProducts] = useState<Set<string>>(new Set());
+  const [exploreProducts, setExploreProducts] = useState<Product[]>([]);
   const itemsPerView = 4;
+
+  // Fetch products from backend (newest products)
+  useEffect(() => {
+    const productService = new ProductService();
+    const inquiry: ProductInquiry = {
+      page: 1,
+      limit: 12, // Get 12 products for carousel
+      order: "createdAt", // Newest products
+    };
+
+    productService
+      .getProducts(inquiry)
+      .then((data) => {
+        setExploreProducts(data);
+      })
+      .catch((err) => console.log("Error fetching explore products:", err));
+  }, []);
 
   const handlePrev = () => {
     setCurrentIndex(Math.max(0, currentIndex - 1));
@@ -124,26 +63,42 @@ export default function ExploreProducts() {
     setLikedProducts(newLiked);
   };
 
+  const handleProductClick = (productId: string) => {
+    history.push(`/products/${productId}`);
+  };
+
+  const handleAddToCart = (product: Product, e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (onAdd) {
+      onAdd({
+        _id: product._id,
+        name: product.productName,
+        price: product.productPrice,
+        image: product.productImages[0],
+        quantity: 1,
+      });
+      sweetTopSuccessAlert("Added to cart!", 700);
+    }
+  };
+
+  const handleViewAll = () => {
+    history.push("/products");
+  };
+
   const visibleProducts = exploreProducts.slice(
     currentIndex,
     currentIndex + itemsPerView
   );
 
-  const renderStars = (rating: number) => {
+  const renderStars = (views: number) => {
+    // Convert views to a rating (for display purposes)
+    const rating = Math.min(5, Math.max(1, Math.floor(views / 20)));
     const stars = [];
-    const fullStars = Math.floor(rating);
-    const hasHalfStar = rating % 1 !== 0;
 
     for (let i = 0; i < 5; i++) {
-      if (i < fullStars) {
+      if (i < rating) {
         stars.push(
           <span key={i} className="star">
-            ★
-          </span>
-        );
-      } else if (i === fullStars && hasHalfStar) {
-        stars.push(
-          <span key={i} className="star half">
             ★
           </span>
         );
@@ -185,82 +140,102 @@ export default function ExploreProducts() {
           </div>
 
           <div className="explore-grid">
-            {visibleProducts.map((product) => (
-              <div key={product.id} className="explore-product-card">
-                <div className="explore-product-image-wrapper">
-                  {product.tag && (
-                    <span className="product-tag">{product.tag}</span>
-                  )}
+            {visibleProducts.length > 0 ? (
+              visibleProducts.map((product) => {
+                const imagePath = `${serverApi}/${product.productImages[0]}`;
+                const hasDiscount = product.productOldPrice && product.productOldPrice > product.productPrice;
 
-                  <img
-                    src={product.image}
-                    alt={product.name}
-                    className="explore-product-image"
-                  />
-
-                  <button
-                    className={`explore-wishlist-btn ${
-                      likedProducts.has(product.id) ? "liked" : ""
-                    }`}
-                    onClick={() => toggleLike(product.id)}
-                    aria-label="Add to wishlist"
+                return (
+                  <div 
+                    key={product._id} 
+                    className="explore-product-card"
+                    onClick={() => handleProductClick(product._id)}
+                    style={{ cursor: "pointer" }}
                   >
-                    {likedProducts.has(product.id) ? (
-                      <FavoriteIcon />
-                    ) : (
-                      <FavoriteBorderIcon />
-                    )}
-                  </button>
+                    <div className="explore-product-image-wrapper">
+                      {hasDiscount && (
+                        <span className="product-tag">
+                          -{Math.round(((product.productOldPrice! - product.productPrice) / product.productOldPrice!) * 100)}%
+                        </span>
+                      )}
 
-                  <button
-                    className="explore-view-btn"
-                    aria-label="View product"
-                  >
-                    <VisibilityIcon />
-                  </button>
+                      <img
+                        src={imagePath}
+                        alt={product.productName}
+                        className="explore-product-image"
+                      />
 
-                  <button className="explore-add-to-cart-btn">
-                    Add To Cart
-                  </button>
-                </div>
+                      <button
+                        className={`explore-wishlist-btn ${
+                          likedProducts.has(product._id) ? "liked" : ""
+                        }`}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          toggleLike(product._id);
+                        }}
+                        aria-label="Add to wishlist"
+                      >
+                        {likedProducts.has(product._id) ? (
+                          <FavoriteIcon />
+                        ) : (
+                          <FavoriteBorderIcon />
+                        )}
+                      </button>
 
-                <div className="explore-product-info">
-                  <h3 className="explore-product-name">{product.name}</h3>
+                      <button
+                        className="explore-view-btn"
+                        aria-label="View product"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleProductClick(product._id);
+                        }}
+                      >
+                        <VisibilityIcon />
+                      </button>
 
-                  <div className="explore-product-price">
-                    <span className="explore-current-price">
-                      ${product.price}
-                    </span>
-                  </div>
-
-                  <div className="explore-product-rating">
-                    <div className="explore-stars">
-                      {renderStars(product.rating)}
+                      <button 
+                        className="explore-add-to-cart-btn"
+                        onClick={(e) => handleAddToCart(product, e)}
+                      >
+                        <ShoppingCartOutlinedIcon />
+                        Add To Cart
+                      </button>
                     </div>
-                    <span className="explore-review-count">
-                      ({product.reviews})
-                    </span>
-                  </div>
 
-                  {product.colors && (
-                    <div className="product-colors">
-                      {product.colors.map((color, index) => (
-                        <button
-                          key={index}
-                          className="color-option"
-                          style={{ backgroundColor: color }}
-                          aria-label={`Color option ${index + 1}`}
-                        />
-                      ))}
+                    <div className="explore-product-info">
+                      <h3 className="explore-product-name">{product.productName}</h3>
+
+                      <div className="explore-product-price">
+                        <span className="explore-current-price">
+                          ${product.productPrice}
+                        </span>
+                        {product.productOldPrice && (
+                          <span className="explore-original-price">
+                            ${product.productOldPrice}
+                          </span>
+                        )}
+                      </div>
+
+                      <div className="explore-product-rating">
+                        <div className="explore-stars">
+                          {renderStars(product.productViews)}
+                        </div>
+                        <span className="explore-review-count">
+                          <RemoveRedEyeIcon style={{ fontSize: 14, marginRight: 4 }} />
+                          {product.productViews} views
+                        </span>
+                      </div>
                     </div>
-                  )}
-                </div>
-              </div>
-            ))}
+                  </div>
+                );
+              })
+            ) : (
+              <div className="no-products">Loading products...</div>
+            )}
           </div>
 
           <div className="explore-view-all-button">
-            <Button className="explore-view-all-btn">View All Products</Button>
+     
           </div>
         </div>
       </Container>

@@ -88,20 +88,19 @@ export default function OtherNavbar({
           <NavLink to="/" className="brand-text">Exclusive</NavLink>
 
           <Stack direction="row" spacing={4} alignItems="center">
-            <NavLink to="/" className="nav-link">Home</NavLink>
-            <NavLink to="/products" className="nav-link">Products</NavLink>
-            <NavLink to="/about" className="nav-link">About</NavLink>
+            <NavLink exact to="/" className="nav-link" activeClassName="active">Home</NavLink>
+            <NavLink to="/products" className="nav-link" activeClassName="active">Products</NavLink>
+            <NavLink to="/about" className="nav-link" activeClassName="active">About</NavLink>
 
             {!authMember ? (
-          <Button
-  variant="contained"
-  onClick={() => history.push("/signup")}
->
-  Sign Up
-</Button>
-
+              <Button
+                variant="contained"
+                onClick={() => history.push("/signup")}
+              >
+                Sign Up
+              </Button>
             ) : (
-              <NavLink to="/orders" className="nav-link underline">Orders</NavLink>
+              <NavLink to="/orders" className="nav-link" activeClassName="active">Orders</NavLink>
             )}
           </Stack>
 

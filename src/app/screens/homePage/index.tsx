@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import Statistics from "./Statistics";
 import PopularDishes from "./PopularDishes";
 import NewDishes from "./NewDishes";
-import Advertisement from "./";
 import ActiveUsers from "./Explor";
 import Events from "./Events";
 import "../../../css/home.css";
@@ -15,7 +14,7 @@ import ProductService from "../../services/ProductService";
 import { ProductCollection } from "../../../lib/enums/product.enum";
 import MemberService from "../../services/MemberService";
 import { Member } from "../../../lib/types/member";
-import { Explore } from "@mui/icons-material";
+import { CartItem } from "../../../lib/types/search";
 
 /* reduxe slice selector */
 
@@ -25,7 +24,11 @@ const actionDispatch = (dispatch: Dispatch) => ({
   setTopUsers: (data: Member[]) => dispatch(setTopUsers(data)),
 });
 
-export default function HomePage() {
+interface HomePageProps {
+  onAdd: (item: CartItem) => void;
+}
+
+export default function HomePage({ onAdd }: HomePageProps) {
   const { setPopularDishes, setNewDishes, setTopUsers } = actionDispatch(
     useDispatch()
   );
@@ -38,7 +41,7 @@ export default function HomePage() {
         page: 1,
         limit: 4,
         order: "productViews",
-        productCollection: ProductCollection.DISH,
+        productCollection: ProductCollection.OTHER,
       })
       .then((data) => {
         setPopularDishes(data);
@@ -69,8 +72,8 @@ export default function HomePage() {
     <div className="homepage">
       <Statistics />
       <PopularDishes />
-      <NewDishes />
-        <Explore />
+      <NewDishes onAdd={onAdd} />
+      <ActiveUsers onAdd={onAdd} />
       <Events />
     </div>
   );
