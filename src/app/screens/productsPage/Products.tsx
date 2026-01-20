@@ -189,41 +189,44 @@ const Products: React.FC<ProductsProps> = ({ onAdd }) => {
 
       {/* Main Content */}
       <Box className="product-page">
-        {/* Search Bar */}
-        <Box className="search-bar">
-          <Input
-            className="search-input"
-            placeholder="Search products..."
-            type="search"
-            value={searchText}
-            onChange={(e) => setSearchText(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") searchProductHandler();
-            }}
-            disableUnderline
-          />
-          <Button
-            className="search-button"
-            variant="contained"
-            onClick={searchProductHandler}
-          >
-            <SearchOutlinedIcon />
-            Search
-          </Button>
-        </Box>
+        {/* Top Bar: Sort Filters on Left, Search on Right */}
+        <Box className="top-filter-bar">
+          {/* Horizontal Sort Filters */}
+          <Box className="sort-filters">
+            {sortOptions.map((option) => (
+              <Button
+                key={option.id}
+                variant={productSearch.order === option.id ? "contained" : "outlined"}
+                className={`sort-btn ${productSearch.order === option.id ? "active" : ""}`}
+                onClick={() => searchOrderHandler(option.id)}
+              >
+                {option.name}
+              </Button>
+            ))}
+          </Box>
 
-        {/* Horizontal Sort Filters */}
-        <Box className="sort-filters">
-          {sortOptions.map((option) => (
+          {/* Search Bar */}
+          <Box className="search-bar">
+            <Input
+              className="search-input"
+              placeholder="Search products..."
+              type="search"
+              value={searchText}
+              onChange={(e) => setSearchText(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") searchProductHandler();
+              }}
+              disableUnderline
+            />
             <Button
-              key={option.id}
-              variant={productSearch.order === option.id ? "contained" : "outlined"}
-              className={`sort-btn ${productSearch.order === option.id ? "active" : ""}`}
-              onClick={() => searchOrderHandler(option.id)}
+              className="search-button"
+              variant="contained"
+              onClick={searchProductHandler}
             >
-              {option.name}
+              <SearchOutlinedIcon />
+              Search
             </Button>
-          ))}
+          </Box>
         </Box>
 
         {/* Products Section */}

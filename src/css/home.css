@@ -565,6 +565,43 @@
   text-decoration: line-through;
 }
 
+.product-price-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.price-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.views-group {
+  display: flex;
+  align-items: center;
+  font-family: "Poppins", sans-serif;
+  font-size: 13px;
+  color: #666;
+}
+
+.views-group span {
+  color: #666;
+}
+
+.product-views {
+  display: flex;
+  align-items: center;
+  font-family: "Poppins", sans-serif;
+  font-size: 13px;
+  color: #666;
+}
+
+.product-views span {
+  color: #666;
+}
+
 .product-rating {
   display: flex;
   align-items: center;
@@ -1962,17 +1999,17 @@
 .music-experience-image::before {
   content: "";
   position: absolute;
-  width: 400px;
-  height: 400px;
+  width: 500px;
+  height: 500px;
   background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
   border-radius: 50%;
   z-index: -1;
 }
 
 .music-experience-image img {
-  max-width: 100%;
+  width: 100%;
+  max-width: 550px;
   height: auto;
-  max-height: 350px;
   object-fit: contain;
   filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.5));
 }
@@ -1988,7 +2025,7 @@
   }
 
   .music-experience-image img {
-    max-height: 280px;
+    max-width: 400px;
   }
 }
 
@@ -2013,7 +2050,7 @@
   }
 
   .music-experience-image img {
-    max-height: 250px;
+    max-width: 350px;
   }
 }
 

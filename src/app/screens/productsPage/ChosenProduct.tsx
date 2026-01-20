@@ -21,8 +21,6 @@ export default function ChosenProduct({ onAdd }: ChosenProductProps) {
   const [product, setProduct] = useState<Product | null>(null);
   const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
   const [selectedImg, setSelectedImg] = useState<string>("");
-  const [color, setColor] = useState("red");
-  const [size, setSize] = useState("M");
   const [qty, setQty] = useState(1);
   const [loading, setLoading] = useState(true);
 
@@ -180,50 +178,6 @@ export default function ChosenProduct({ onAdd }: ChosenProductProps) {
           </div>
           <div style={{ fontSize: 28, fontWeight: 700 }}>${product.productPrice}.00</div>
           <div style={{ color: "#444", fontSize: 15 }}>{product.productDesc || "No description available."}</div>
-          {/* Color */}
-          <div>
-            <span style={{ marginRight: 12 }}>Colours:</span>
-            <span
-              onClick={() => setColor("red")}
-              style={{
-                display: "inline-block",
-                width: 18,
-                height: 18,
-                borderRadius: "50%",
-                background: "#d32f2f",
-                border: color === "red" ? "2px solid #222" : "1px solid #eee",
-                marginRight: 8,
-                cursor: "pointer",
-              }}
-            />
-            <span
-              onClick={() => setColor("gray")}
-              style={{
-                display: "inline-block",
-                width: 18,
-                height: 18,
-                borderRadius: "50%",
-                background: "#888",
-                border: color === "gray" ? "2px solid #222" : "1px solid #eee",
-                cursor: "pointer",
-              }}
-            />
-          </div>
-          {/* Size */}
-          <div>
-            <span style={{ marginRight: 12 }}>Size:</span>
-            {["XS", "S", "M", "L", "XL"].map((s) => (
-              <Button
-                key={s}
-                variant={size === s ? "contained" : "outlined"}
-                size="small"
-                sx={{ minWidth: 36, marginRight: 1 }}
-                onClick={() => setSize(s)}
-              >
-                {s}
-              </Button>
-            ))}
-          </div>
           {/* Quantity and Buy/Add */}
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
             <Button

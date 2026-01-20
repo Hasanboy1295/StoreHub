@@ -64,6 +64,13 @@
   margin-right: 60px;
   display: flex;
   flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+
+.orders-page .order-inf .order-box-scroll .order-name-price .price-box-inf p {
+  margin: 0;
+  line-height: 1;
 }
 
 .orders-page .order-inf .order-box-scroll .order-name-price .order-dish-img {

@@ -373,22 +373,17 @@ export default function Statistics() {
 
                   <div className="product-info">
                     <h3 className="product-name">{product.productName}</h3>
-                    <div className="product-price">
-                      <span className="current-price">${product.productPrice}</span>
-                      {product.productOldPrice && (
-                        <span className="original-price">${product.productOldPrice}</span>
-                      )}
-                    </div>
-                    <div className="product-rating">
-                      <div className="stars">
-                        {[...Array(5)].map((_, i) => (
-                          <span key={i} className="star">★</span>
-                        ))}
+                    <div className="product-price-row">
+                      <div className="price-group">
+                        <span className="current-price">${product.productPrice}</span>
+                        {product.productOldPrice && (
+                          <span className="original-price">${product.productOldPrice}</span>
+                        )}
                       </div>
-                      <span className="rating-count">
-                        <RemoveRedEyeIcon style={{ fontSize: 14, marginRight: 4 }} />
-                        {product.productViews}
-                      </span>
+                      <div className="views-group">
+                        <RemoveRedEyeIcon style={{ fontSize: 14, marginRight: 4, color: "#666" }} />
+                        <span>{product.productViews}</span>
+                      </div>
                     </div>
                   </div>
                 </div>

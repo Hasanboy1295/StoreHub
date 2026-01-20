@@ -102,10 +102,10 @@ export default function PopularDishes() {
 
         {/* Categories Grid */}
         <div className="categories-grid">
-          {visibleCategories.map((category, index) => (
+          {visibleCategories.map((category) => (
             <div
               key={category.id}
-              className={`category-card ${index === 3 ? "active" : ""}`}
+              className="category-card"
               onClick={() => handleCategoryClick(category.collection)}
               style={{ cursor: "pointer" }}
             >

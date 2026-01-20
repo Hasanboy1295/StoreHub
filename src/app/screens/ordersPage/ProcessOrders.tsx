@@ -1,5 +1,9 @@
 import TabPanel from "@mui/lab/TabPanel";
 import { Box, Button, Container, Stack } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import DragHandleIcon from "@mui/icons-material/DragHandle";
+import AddIcon from "@mui/icons-material/Add";
+import ShoppingBagOutlinedIcon from "@mui/icons-material/ShoppingBagOutlined";
 import moment from "moment";
 import { createSelector } from "@reduxjs/toolkit";
 import { retrieveProcessOrdes } from "./selector";
@@ -12,6 +16,15 @@ import { T } from "../../../lib/types/common";
 import { OrderStatus } from "../../../lib/enums/order.enum";
 import OrderService from "../../services/OrderService";
 import { sweetErrorHandling } from "../../../lib/sweetAlert";
+
+// Helper function to get proper image path
+const getImagePath = (image: string) => {
+  if (!image) return "/img/default-product.png";
+  if (image.startsWith("http://") || image.startsWith("https://")) {
+    return image;
+  }
+  return `${serverApi}/${image.startsWith("/") ? image.slice(1) : image}`;
+};
 
 //REDUX SELECTOR
 const processOrdesRetriver = createSelector(
@@ -69,18 +82,20 @@ export default function ProcessOrders(props: ProcessOrdersProps) {
                   return (
                     <Box key={item._id} className="order-name-price">
                       <div className="order-name-price-inf">
-                        <img src={imagePath} className="order-dish-img" />
+                        <img 
+                          src={getImagePath(product.productImages[0])} 
+                          className="order-dish-img" 
+                          alt={product.productName}
+                        />
                         <p className="title-dish">{product.productName}</p>
                       </div>
                       <Box className="price-box">
                         <div className="price-box-inf">
                           <p>${item.itemPrice}</p>
-                          <img src="/icons/close.svg" />
+                          <CloseIcon sx={{ fontSize: 14, color: "#666", verticalAlign: "middle" }} />
                           <p>{item.itemQuantity}</p>
-                          <img src="/icons/pause.svg" />
-                          <p style={{ marginLeft: "15px" }}>
-                            ${item.itemQuantity * item.itemPrice}
-                          </p>
+                          <DragHandleIcon sx={{ fontSize: 14, color: "#666", verticalAlign: "middle" }} />
+                          <p>${item.itemQuantity * item.itemPrice}</p>
                         </div>
                       </Box>
                     </Box>
@@ -92,10 +107,10 @@ export default function ProcessOrders(props: ProcessOrdersProps) {
                 <Box className="box-total">
                   <p>Product price</p>
                   <p>${order.orderTotal - order.orderDelivery}</p>
-                  <img src="/icons/plus.svg" style={{ marginLeft: "22px" }} />
+                  <AddIcon sx={{ fontSize: 18, mx: 2, color: "#666" }} />
                   <p>Delivery cost</p>
                   <p>${order.orderDelivery}</p>
-                  <img src="/icons/pause.svg" />
+                  <DragHandleIcon sx={{ fontSize: 18, mx: 2, color: "#666" }} />
                   <p>Total</p>
                   <p>${order.orderTotal}</p>
                   <p className="data-compl">
@@ -119,13 +134,13 @@ export default function ProcessOrders(props: ProcessOrdersProps) {
           (processOrders.length === 0 && (
             <Box
               display={"flex"}
-              flexDirection={"row"}
+              flexDirection={"column"}
+              alignItems={"center"}
               justifyContent={"center"}
+              py={8}
             >
-              <img
-                src="/icons/noimage-list.svg"
-                style={{ width: 300, height: 300 }}
-              />
+              <ShoppingBagOutlinedIcon sx={{ fontSize: 120, color: "#ccc" }} />
+              <p style={{ color: "#999", marginTop: 16 }}>No orders in process</p>
             </Box>
           ))}
       </Stack>

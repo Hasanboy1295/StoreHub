@@ -63,11 +63,20 @@
   font-size: 18px;
 }
 
+/* Top Filter Bar - Sort on Left, Search on Right */
+.top-filter-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+}
+
 /* Horizontal Sort Filters */
 .sort-filters {
   display: flex;
   gap: 12px;
-  margin-bottom: 30px;
   flex-wrap: wrap;
 }
 
@@ -393,12 +402,12 @@
 .search-bar {
   display: flex;
   gap: 12px;
-  margin-bottom: 24px;
-  max-width: 500px;
+  align-items: center;
 }
 
 .search-input {
   flex: 1;
+  min-width: 200px;
   padding: 10px 16px;
   border: 1px solid #e0e0e0;
   border-radius: 8px;

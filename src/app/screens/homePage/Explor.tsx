@@ -57,7 +57,7 @@ export default function Explor() {
             <span className="music-category-tag">Categories</span>
             <h2 className="music-title">
               Enhance Your<br />
-              Music Experience
+             Look Phone
             </h2>
 
             {/* Countdown Timer */}
@@ -92,8 +92,8 @@ export default function Explor() {
           {/* Right Image */}
           <div className="music-experience-image">
             <img
-              src="/img/speaker.png"
-              alt="JBL Speaker"
+              src="/img/oth.jpg"
+              alt="Other"
             />
           </div>
         </div>
