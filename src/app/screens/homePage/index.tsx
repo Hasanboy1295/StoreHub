@@ -73,7 +73,7 @@ export default function HomePage({ onAdd }: HomePageProps) {
       <Statistics />
       <PopularDishes />
       <NewDishes onAdd={onAdd} />
-      <ActiveUsers onAdd={onAdd} />
+      <ActiveUsers />
       <Events />
     </div>
   );

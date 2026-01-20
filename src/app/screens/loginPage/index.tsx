@@ -1,11 +1,14 @@
 import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
 import MemberService from "../../services/MemberService";
 import { sweetErrorHandling, sweetTopSuccessAlert } from "../../../lib/sweetAlert";
-
+import { useGlobals } from "../../hooks/useGlobals";
 
 import "../../../css/login.css";
 
 export default function LoginPage() {
+  const history = useHistory();
+  const { setAuthMember } = useGlobals();
   const [form, setForm] = useState({
     memberPhone: "",
     memberPassword: "",
@@ -23,12 +26,15 @@ export default function LoginPage() {
     setError(null);
     try {
       const memberService = new MemberService();
-      await memberService.login({
+      const member = await memberService.login({
         memberNick: form.memberPhone,
         memberPassword: form.memberPassword,
       });
-      await sweetTopSuccessAlert("Logged in!", 1200);
-      // Optionally redirect or clear form here
+      // Update global auth state without page reload
+      setAuthMember(member);
+      await sweetTopSuccessAlert("Logged in!", 700);
+      // Redirect to home page
+      history.push("/");
     } catch (err: any) {
       setError("Login failed. Please try again.");
       sweetErrorHandling(err);

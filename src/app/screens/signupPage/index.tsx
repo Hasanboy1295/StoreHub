@@ -1,10 +1,14 @@
 import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
 import MemberService from "../../services/MemberService";
 import { MemberInput } from "../../../lib/types/member";
 import { sweetErrorHandling, sweetTopSuccessAlert } from "../../../lib/sweetAlert";
+import { useGlobals } from "../../hooks/useGlobals";
 import "../../../css/signup.css";
 
 export default function SignupPage() {
+  const history = useHistory();
+  const { setAuthMember } = useGlobals();
   const [form, setForm] = useState<MemberInput>({
     memberNick: "",
     memberPhone: "",
@@ -23,9 +27,12 @@ export default function SignupPage() {
     setError(null);
     try {
       const memberService = new MemberService();
-      await memberService.signup(form);
-      await sweetTopSuccessAlert("Account created!", 1200);
-      // Optionally redirect or clear form here
+      const member = await memberService.signup(form);
+      // Update global auth state without page reload
+      setAuthMember(member);
+      await sweetTopSuccessAlert("Account created!", 700);
+      // Redirect to home page
+      history.push("/");
     } catch (err: any) {
       setError("Signup failed. Please try again.");
       sweetErrorHandling(err);

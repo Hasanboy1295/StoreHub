@@ -1,7 +1,6 @@
 import { Box } from "@mui/material";
 import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
 import Button from "@mui/material/Button";
-import { useGlobals } from "../../hooks/useGlobals";
 import { useState } from "react";
 import { MemberUpdateInput } from "../../../lib/types/member";
 import { T } from "../../../lib/types/common";
@@ -11,6 +10,9 @@ import {
 } from "../../../lib/sweetAlert";
 import { Messages, serverApi } from "../../../lib/config";
 import MemberService from "../../services/MemberService";
+import React from "react";
+// import { useGlobals } from "../../hooks/useGlobal";
+import { useGlobals } from "../../hooks/useGlobals";
 
 export function Settings() {
   const { authMember, setAuthMember } = useGlobals();
@@ -135,7 +137,7 @@ export function Settings() {
               authMember?.memberAdress ? authMember.memberAdress : "no adress"
             }
             value={memberUpdateInput.memberAdress}
-            name="memberAddress"
+            name="memberAdress"
             onClick={memberAddressHandler}
           />
         </div>

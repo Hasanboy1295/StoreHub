@@ -110,7 +110,13 @@ export default function Basket(props: BasketProps) {
             <div className="basket-float-empty">Cart is empty!</div>
           ) : (
             cartItems.map((item: CartItem) => {
-              const imagePath = `${serverApi}/${item.image}`;
+              // Handle different image path formats
+              let imagePath = item.image;
+              if (imagePath && !imagePath.startsWith("http://") && !imagePath.startsWith("https://")) {
+                imagePath = imagePath.startsWith("/") 
+                  ? `${serverApi}${imagePath}` 
+                  : `${serverApi}/${imagePath}`;
+              }
               return (
                 <div className="basket-float-row" key={item._id}>
                   <button className="basket-float-remove" onClick={() => onDelete(item)}>

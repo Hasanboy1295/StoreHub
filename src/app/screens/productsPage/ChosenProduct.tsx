@@ -1,7 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Box, Button, Stack } from "@mui/material";
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import { CartItem } from "../../../lib/types/search";
+import { Product, ProductInquiry } from "../../../lib/types/product";
+import ProductService from "../../services/ProductService";
+import { serverApi } from "../../../lib/config";
 import "../../../css/basket.css";
 
 interface ChosenProductProps {
@@ -12,76 +15,121 @@ interface RouteParams {
   productId: string;
 }
 
-const galleryImages = [
-  "https://static-01.daraz.com.bd/p/6e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e.jpg",
-  "https://static-01.daraz.com.bd/p/6e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e.jpg",
-  "https://static-01.daraz.com.bd/p/6e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e.jpg",
-  "https://static-01.daraz.com.bd/p/6e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e.jpg",
-];
-
-const relatedItems = [
-  {
-    img: "https://static-01.daraz.com.bd/p/6e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e.jpg",
-    name: "HAVIT HV-G92 Gamepad",
-    price: "$120",
-    oldPrice: "$160",
-    discount: "-25%",
-    rating: 4.5,
-    reviews: 88,  
-  },
-  {
-    img: "https://cdn-icons-png.flaticon.com/512/107/107831.png",
-    name: "AK-900 Wired Keyboard",
-    price: "$960",
-    oldPrice: "$1160",
-    discount: "-35%",
-    rating: 5,
-    reviews: 75,
-  },
-  {
-    img: "https://cdn-icons-png.flaticon.com/512/107/107831.png",
-    name: "IPS LCD Gaming Monitor",
-    price: "$370",
-    oldPrice: "$400",
-    discount: "-8%",
-    rating: 4.8,
-    reviews: 99,
-  },
-  {
-    img: "https://cdn-icons-png.flaticon.com/512/107/107831.png",
-    name: "RGB liquid CPU Cooler",
-    price: "$160",
-    oldPrice: "$170",
-    discount: "-6%",
-    rating: 4.7,
-    reviews: 65,
-  },
-];
-
 export default function ChosenProduct({ onAdd }: ChosenProductProps) {
   const { productId } = useParams<RouteParams>();
-  const [selectedImg, setSelectedImg] = useState(galleryImages[0]);
+  const history = useHistory();
+  const [product, setProduct] = useState<Product | null>(null);
+  const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
+  const [selectedImg, setSelectedImg] = useState<string>("");
   const [color, setColor] = useState("red");
   const [size, setSize] = useState("M");
   const [qty, setQty] = useState(1);
+  const [loading, setLoading] = useState(true);
 
-  const product = {
-    _id: productId,
-    productName: "Havic HV G-92 Gamepad",
-    productPrice: 192,
-    productImages: galleryImages,
-    productDescription:
-      "PlayStation 5 Controller Skin High quality vinyl with air channel adhesive for easy bubble free install & mess free removal Pressure sensitive.",
-    rating: 5,
-    reviews: 150,
-    inStock: true,
+  // Fetch product details
+  useEffect(() => {
+    const productService = new ProductService();
+    
+    productService
+      .getProduct(productId)
+      .then((data) => {
+        console.log("Fetched product:", data);
+        setProduct(data);
+        if (data.productImages && data.productImages.length > 0) {
+          const firstImg = data.productImages[0];
+          // Handle different image path formats
+          if (firstImg.startsWith("http://") || firstImg.startsWith("https://")) {
+            setSelectedImg(firstImg);
+          } else if (firstImg.startsWith("/")) {
+            setSelectedImg(`${serverApi}${firstImg}`);
+          } else {
+            setSelectedImg(`${serverApi}/${firstImg}`);
+          }
+        }
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log("Error fetching product:", err);
+        setLoading(false);
+      });
+  }, [productId]);
+
+  // Fetch related products
+  useEffect(() => {
+    const productService = new ProductService();
+    const inquiry: ProductInquiry = {
+      page: 1,
+      limit: 4,
+      order: "productViews",
+    };
+
+    // If product has collection, filter by same collection
+    if (product?.productCollection) {
+      inquiry.productCollection = product.productCollection;
+    }
+
+    productService
+      .getProducts(inquiry)
+      .then((data) => {
+        // Filter out current product from related items
+        const filtered = data.filter((p) => p._id !== productId);
+        setRelatedProducts(filtered.slice(0, 4));
+      })
+      .catch((err) => console.log("Error fetching related products:", err));
+  }, [product, productId]);
+
+  const handleRelatedProductClick = (id: string) => {
+    history.push(`/products/${id}`);
   };
+
+  const getProductImage = (images: string[] | undefined, index: number = 0): string => {
+    if (images && images.length > index) {
+      const img = images[index];
+      // Check if image already has full URL
+      if (img.startsWith("http://") || img.startsWith("https://")) {
+        return img;
+      }
+      // Check if image starts with /
+      if (img.startsWith("/")) {
+        return `${serverApi}${img}`;
+      }
+      return `${serverApi}/${img}`;
+    }
+    return "/img/default-product.png";
+  };
+
+  // Debug: Log product data
+  useEffect(() => {
+    if (product) {
+      console.log("Product data:", product);
+      console.log("Product images:", product.productImages);
+    }
+  }, [product]);
+
+  if (loading) {
+    return (
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: 400 }}>
+        <p>Loading...</p>
+      </div>
+    );
+  }
+
+  if (!product) {
+    return (
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: 400 }}>
+        <p>Product not found</p>
+      </div>
+    );
+  }
+
+  // Build gallery images using the helper function
+  const galleryImages = product.productImages?.map((img, idx) => getProductImage(product.productImages, idx)) || [];
 
   return (
     <div className="chosen-product-page" style={{ background: "#fff", padding: 32 }}>
       {/* Breadcrumb */}
       <div style={{ color: "#888", fontSize: 14, marginBottom: 16 }}>
-        Account / Gaming / <span style={{ color: "#222" }}>{product.productName}</span>
+        Account / {product.productCollection} / <span style={{ color: "#222" }}>{product.productName}</span>
       </div>
       <Box sx={{ display: "flex", gap: 32 }}>
         {/* Gallery */}
@@ -98,6 +146,7 @@ export default function ChosenProduct({ onAdd }: ChosenProductProps) {
                 borderRadius: 8,
                 border: selectedImg === img ? "2px solid #ff4d4f" : "1px solid #eee",
                 cursor: "pointer",
+                background: "#f5f5f5",
               }}
               onClick={() => setSelectedImg(img)}
             />
@@ -106,12 +155,12 @@ export default function ChosenProduct({ onAdd }: ChosenProductProps) {
         {/* Main Image */}
         <Box>
           <img
-            src={selectedImg}
+            src={selectedImg || getProductImage(product.productImages)}
             alt={product.productName}
             style={{
               width: 320,
               height: 320,
-              objectFit: "cover",
+              objectFit: "contain",
               borderRadius: 16,
               background: "#fafafa",
             }}
@@ -121,16 +170,16 @@ export default function ChosenProduct({ onAdd }: ChosenProductProps) {
         <Stack spacing={2} sx={{ minWidth: 340 }}>
           <h2 style={{ margin: 0 }}>{product.productName}</h2>
           <div style={{ color: "#ffb400", fontWeight: 600 }}>
-            {"★".repeat(product.rating)}{" "}
+            {"★".repeat(5)}{" "}
             <span style={{ color: "#888", fontWeight: 400 }}>
-              ({product.reviews} Reviews)
+              ({product.productViews || 0} Views)
             </span>{" "}
             <span style={{ color: "#00b67a", fontWeight: 500 }}>
-              {product.inStock ? " | In Stock" : " | Out of Stock"}
+              {product.productLeftCount && product.productLeftCount > 0 ? " | In Stock" : " | Out of Stock"}
             </span>
           </div>
           <div style={{ fontSize: 28, fontWeight: 700 }}>${product.productPrice}.00</div>
-          <div style={{ color: "#444", fontSize: 15 }}>{product.productDescription}</div>
+          <div style={{ color: "#444", fontSize: 15 }}>{product.productDesc || "No description available."}</div>
           {/* Color */}
           <div>
             <span style={{ marginRight: 12 }}>Colours:</span>
@@ -201,41 +250,17 @@ export default function ChosenProduct({ onAdd }: ChosenProductProps) {
                   _id: product._id,
                   name: product.productName,
                   price: product.productPrice,
-                  image: selectedImg,
+                  image: selectedImg || getProductImage(product.productImages),
                   quantity: qty,
                 })
               }
             >
               ADD TO BASKET
             </Button>
-                    {/* <Button
-                variant="contained"
-                onClick={(e) => {
-                onAdd({
-                  _id: product._id,
-                  name: product.productName,
-                  price: product.productPrice,
-                  image: selectedImg,
-                  quantity: qty,
-                })
-                  e.stopPropagation();
-                }}
-              >
-                Add To Baskets
-              </Button> */}
             <Button
               variant="outlined"
               color="error"
               sx={{ minWidth: 48 }}
-              onClick={() =>
-                onAdd({
-                  _id: product._id,
-                  name: product.productName,
-                  price: product.productPrice,
-                  image: selectedImg,
-                  quantity: qty,
-                })
-              }
             >
               ♥
             </Button>
@@ -245,7 +270,7 @@ export default function ChosenProduct({ onAdd }: ChosenProductProps) {
             <Box
               sx={{
                 border: "1px solid #eee",
-                borderRadius: 8,
+                borderRadius: 2,
                 padding: 2,
                 minWidth: 160,
                 fontSize: 14,
@@ -258,7 +283,7 @@ export default function ChosenProduct({ onAdd }: ChosenProductProps) {
             <Box
               sx={{
                 border: "1px solid #eee",
-                borderRadius: 8,
+                borderRadius: 2,
                 padding: 2,
                 minWidth: 160,
                 fontSize: 14,
@@ -302,9 +327,10 @@ export default function ChosenProduct({ onAdd }: ChosenProductProps) {
           Related Item
         </div>
         <div style={{ display: "flex", gap: 32 }}>
-          {relatedItems.map((item, idx) => (
+          {relatedProducts.map((item) => (
             <div
-              key={idx}
+              key={item._id}
+              onClick={() => handleRelatedProductClick(item._id)}
               style={{
                 background: "#fff",
                 borderRadius: 12,
@@ -312,56 +338,58 @@ export default function ChosenProduct({ onAdd }: ChosenProductProps) {
                 padding: 18,
                 width: 200,
                 position: "relative",
+                cursor: "pointer",
+                transition: "transform 0.2s ease",
               }}
+              onMouseOver={(e) => (e.currentTarget.style.transform = "translateY(-4px)")}
+              onMouseOut={(e) => (e.currentTarget.style.transform = "translateY(0)")}
             >
-              {item.discount && (
-                <div
-                  style={{
-                    position: "absolute",
-                    top: 12,
-                    left: 12,
-                    background: "#ff4d4f",
-                    color: "#fff",
-                    fontSize: "0.9rem",
-                    fontWeight: 600,
-                    borderRadius: 8,
-                    padding: "2px 10px",
-                    zIndex: 2,
-                  }}
-                >
-                  {item.discount}
-                </div>
-              )}
+              <div
+                style={{
+                  position: "absolute",
+                  top: 12,
+                  left: 12,
+                  background: "#ff4d4f",
+                  color: "#fff",
+                  fontSize: "0.9rem",
+                  fontWeight: 600,
+                  borderRadius: 8,
+                  padding: "2px 10px",
+                  zIndex: 2,
+                }}
+              >
+                -{Math.floor(Math.random() * 30) + 5}%
+              </div>
               <img
-                src={item.img}
-                alt={item.name}
+                src={getProductImage(item.productImages)}
+                alt={item.productName}
                 style={{
                   width: 120,
                   height: 120,
                   objectFit: "contain",
                   marginBottom: 12,
+                  background: "#f5f5f5",
+                  borderRadius: 8,
                 }}
               />
-              <div style={{ fontWeight: 500, marginBottom: 6 }}>{item.name}</div>
+              <div style={{ fontWeight: 500, marginBottom: 6 }}>{item.productName}</div>
               <div style={{ color: "#ff4d4f", fontWeight: 600 }}>
-                {item.price}{" "}
-                {item.oldPrice && (
-                  <span
-                    style={{
-                      color: "#888",
-                      textDecoration: "line-through",
-                      fontSize: "1rem",
-                      marginLeft: 8,
-                    }}
-                  >
-                    {item.oldPrice}
-                  </span>
-                )}
+                ${item.productPrice}{" "}
+                <span
+                  style={{
+                    color: "#888",
+                    textDecoration: "line-through",
+                    fontSize: "1rem",
+                    marginLeft: 8,
+                  }}
+                >
+                  ${Math.floor(item.productPrice * 1.2)}
+                </span>
               </div>
               <div style={{ color: "#ffb400", fontSize: "1.1rem" }}>
-                {"★".repeat(Math.round(item.rating))}
+                {"★★★★★"}
                 <span style={{ color: "#888", fontSize: "0.95rem", marginLeft: 4 }}>
-                  ({item.reviews})
+                  ({item.productViews || 0})
                 </span>
               </div>
             </div>
