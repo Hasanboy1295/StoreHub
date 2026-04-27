@@ -9,14 +9,14 @@ import ProcessOrders from "./ProcessOrders";
 import FinishedOrders from "./FinishedOrders";
 import { Order, OrderInquiry } from "../../../lib/types/order";
 import { setFinishedOrders, setPausedOrders, setProcessOrders } from "./slice";
-import { OrderStatus } from "../../../lib/enums/order.enum";
+
 import OrderService from "../../services/OrderService";
 import { useGlobals } from "../../hooks/useGlobals";
 import "../../../css/orders.css";
 import { useHistory } from "react-router-dom";
 import { serverApi } from "../../../lib/config";
 import { MemberType } from "../../../lib/enums/member.enum";
-
+import { OrderStatus } from "../../../lib/enums/order.enum";
 /* reduxe slice selector */
 
 const actionDispatch = (dispatch: Dispatch) => ({

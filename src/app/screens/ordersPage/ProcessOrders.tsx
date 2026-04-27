@@ -75,17 +75,20 @@ export default function ProcessOrders(props: ProcessOrdersProps) {
             <Box key={order._id} className="order-inf ">
               <Box className="order-box-scroll">
                 {order?.orderItems?.map((item: OrderItem) => {
-                  const product: Product = order.productData.filter(
+                  const product: Product | undefined = order.productData?.find(
                     (ele: Product) => item.productId === ele._id
-                  )[0];
-                  const imagePath = `${serverApi}/${product.productImages[0]}`;
-                  return (
+                  );
+                  // Defensive checks for product and productImages
+                  const imageSrc = product?.productImages && product.productImages.length > 0
+                    ? getImagePath(product.productImages[0])
+                    : "/img/default-product.png";
+                  return product ? (
                     <Box key={item._id} className="order-name-price">
                       <div className="order-name-price-inf">
                         <img 
-                          src={getImagePath(product.productImages[0])} 
+                          src={imageSrc}
                           className="order-dish-img" 
-                          alt={product.productName}
+                          alt={product.productName || "Product"}
                         />
                         <p className="title-dish">{product.productName}</p>
                       </div>
@@ -99,7 +102,7 @@ export default function ProcessOrders(props: ProcessOrdersProps) {
                         </div>
                       </Box>
                     </Box>
-                  );
+                  ) : null;
                 })}
               </Box>
 

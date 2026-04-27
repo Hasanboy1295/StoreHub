@@ -86,7 +86,16 @@ export default function SignupPage() {
             </button>
           </form>
           {error && <div style={{ color: "red", marginTop: 8 }}>{error}</div>}
-          <button className="google-btn" type="button">
+          <button
+            className="google-btn"
+            type="button"
+            onClick={() => {
+              window.location.href =
+                process.env.REACT_APP_API_URL
+                  ? `${process.env.REACT_APP_API_URL}/auth/google`
+                  : "http://localhost:5000/auth/google";
+            }}
+          >
             <img
               src="/img/Icon-Google.png"
               alt="Google"

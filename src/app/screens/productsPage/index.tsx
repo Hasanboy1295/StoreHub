@@ -16,12 +16,14 @@ export default function ProductsPage(props: ProductsPageProps) {
   return (
     <div className={"productspage"}>
       <Switch>
-        <Route path={`${products.path}/:productId`}>
-          <ChosenProduct onAdd={onAdd} />
-        </Route>
-         <Route path={`${products.path}`}>
-        <Products onAdd={onAdd}/>
-        </Route>
+        <Route
+          path={`${products.path}/:productId`}
+          render={() => <ChosenProduct onAdd={onAdd} />}
+        />
+        <Route
+          path={`${products.path}`}
+          render={() => <Products onAdd={onAdd} />}
+        />
       </Switch>
     </div>
   );

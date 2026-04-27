@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import Modal from "@material-ui/core/Modal";
-import Backdrop from "@material-ui/core/Backdrop";
-import Fade from "@material-ui/core/Fade";
+import Modal from "@mui/material/Modal";
+import Backdrop from "@mui/material/Backdrop";
+import Fade from "@mui/material/Fade";
 import { Fab, Stack, TextField } from "@mui/material";
 import styled from "styled-components";
 import LoginIcon from "@mui/icons-material/Login";
@@ -14,19 +13,19 @@ import MemberService from "../../services/MemberService";
 import { sweetErrorHandling } from "../../../lib/sweetAlert";
 import { useGlobals } from "../../hooks/useGlobals";
 
-const useStyles = makeStyles((theme) => ({
-  modal: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  paper: {
-    backgroundColor: theme.palette.background.paper,
-    border: "2px solid #000",
-    boxShadow: theme.shadows[5],
-    padding: theme.spacing(2, 2, 2),
-  },
-}));
+
+const modalStyle = {
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+};
+
+const paperStyle = {
+  backgroundColor: "#fff",
+  border: "2px solid #000",
+  boxShadow: 5,
+  padding: "16px",
+};
 
 const ModalImg = styled.img`
   width: 62%;
@@ -46,7 +45,6 @@ interface AuthenticationModalProps {
 
 export default function AuthenticationModal(props: AuthenticationModalProps) {
   const { signupOpen, loginOpen, handleSignupClose, handleLoginClose } = props;
-  const classes = useStyles();
 
   const [memberNick, setMemberNick] = useState<string>("");
   const [memberPhone, setMemberPhone] = useState<string>("");
@@ -58,6 +56,15 @@ export default function AuthenticationModal(props: AuthenticationModalProps) {
   const handleUserName = (e: T) => {
     setMemberNick(e.target.value);
   };
+
+  // ...existing code...
+
+  // Example usage in JSX (update your Modal usage):
+  // <Modal open={loginOpen} onClose={handleLoginClose} sx={modalStyle}>
+  //   <Fade in={loginOpen}>
+  //     <div style={paperStyle}> ... </div>
+  //   </Fade>
+  // </Modal>
   const handlePhone = (e: T) => {
     setMemberPhone(e.target.value);
   };
@@ -127,7 +134,7 @@ export default function AuthenticationModal(props: AuthenticationModalProps) {
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
-        className={classes.modal}
+        sx={modalStyle}
         open={signupOpen}
         onClose={handleSignupClose}
         closeAfterTransition
@@ -138,9 +145,7 @@ export default function AuthenticationModal(props: AuthenticationModalProps) {
       >
         <Fade in={signupOpen}>
           <Stack
-            className={classes.paper}
-            direction={"row"}
-            sx={{ width: "800px" }}
+            sx={{ ...paperStyle, width: "800px", flexDirection: "row" }}
           >
             <ModalImg src={"/img/auth.webp"} alt="camera" />
             <Stack sx={{ marginLeft: "69px", alignItems: "center" }}>
@@ -183,7 +188,7 @@ export default function AuthenticationModal(props: AuthenticationModalProps) {
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
-        className={classes.modal}
+        sx={modalStyle}
         open={loginOpen}
         onClose={handleLoginClose}
         closeAfterTransition
@@ -194,9 +199,7 @@ export default function AuthenticationModal(props: AuthenticationModalProps) {
       >
         <Fade in={loginOpen}>
           <Stack
-            className={classes.paper}
-            direction={"row"}
-            sx={{ width: "700px" }}
+            sx={{ ...paperStyle, width: "700px", flexDirection: "row" }}
           >
             <ModalImg src={"/img/auth.webp"} alt="camera" />
             <Stack

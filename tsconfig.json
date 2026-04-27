@@ -22,5 +22,6 @@
   },
   "include": [
     "src"
-, "src/app/screens/homePage/.tsx"  ]
+, "src/**/*.tsx"
+]
 }

@@ -84,6 +84,24 @@ export default function LoginPage() {
             </div>
           </form>
           {error && <div style={{ color: "red", marginTop: 8 }}>{error}</div>}
+          <button
+            className="google-btn"
+            type="button"
+            style={{ marginTop: 16 }}
+            onClick={() => {
+              window.location.href =
+                process.env.REACT_APP_API_URL
+                  ? `${process.env.REACT_APP_API_URL}/auth/google`
+                  : "http://localhost:3003/auth/google";
+            }}
+          >
+            <img
+              src="/img/Icon-Google.png"
+              alt="Google"
+              className="google-icon"
+            />
+            Log in with Google
+          </button>
         </div>
       </div>
     </div>
