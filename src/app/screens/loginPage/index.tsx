@@ -92,7 +92,7 @@ export default function LoginPage() {
               window.location.href =
                 process.env.REACT_APP_API_URL
                   ? `${process.env.REACT_APP_API_URL}/auth/google`
-                  : "http://localhost:3003/auth/google";
+                  : "http://localhost:3025/auth/google";
             }}
           >
             <img
