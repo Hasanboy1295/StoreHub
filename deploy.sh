@@ -9,11 +9,9 @@ npm i yarn -g
 yarn global add serve
 yarn
 yarn run build
-pm2 start "yarn run start:prod" --name=StoreHub
-
-
-
-
+pm2 delete StoreHub
+pm2 start "serve -s build -l 3026" --name=StoreHub
+pm2 save
 
 
 #!/bin/bash
